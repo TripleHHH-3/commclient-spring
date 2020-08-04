@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Tab text="Untitled Tab" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+     fx:controller="com.ut.commclient.controller.UdpMulticastTabController">
+    <content>
+        <VBox prefHeight="200.0" prefWidth="100.0">
+            <children>
+                <HBox prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <TextField fx:id="bindIpGroupTxt" prefWidth="100.0" text="224.255.10.0"/>
+                        <TextField fx:id="bindPortTxt" prefWidth="50.0" text="9999"/>
+                        <Button fx:id="bindBeginBtn" mnemonicParsing="false" text="绑定群组"/>
+                        <Button fx:id="bindStopBtn" disable="true" mnemonicParsing="false" text="停止绑定"/>
+                        <Button fx:id="sendBtn" disable="true" mnemonicParsing="false" text="发送信息"/>
+                    </children>
+                </HBox>
+                <TextArea fx:id="sendMsgTxt" prefWidth="100.0"/>
+                <HBox prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <TextField fx:id="listenIpGroupTxt" prefWidth="100.0" text="224.255.10.0"/>
+                        <TextField fx:id="listenPortTxt" prefWidth="50.0" text="9999"/>
+                        <Button fx:id="listenBeginBtn" mnemonicParsing="false" text="监听群组"/>
+                        <Button fx:id="listenStopBtn" disable="true" mnemonicParsing="false" text="停止监听"/>
+                    </children>
+                </HBox>
+                <TextArea editable="false" prefHeight="200.0" prefWidth="200.0"/>
+            </children>
+        </VBox>
+    </content>
+</Tab>

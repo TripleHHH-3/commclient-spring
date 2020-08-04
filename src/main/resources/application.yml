@@ -1,1 +1,8 @@
-
+javafx:
+  title: Communication Client
+#  appicons:
+  stage:
+    width: 800
+    height: 600
+    resizable: false
+    sytle:

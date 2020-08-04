@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Tab text="Untitled Tab" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+     fx:controller="com.ut.commclient.controller.UdpDatagramTabController">
+    <content>
+        <VBox prefHeight="200.0" prefWidth="100.0">
+            <children>
+                <HBox prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <TextField fx:id="ipTxt" prefWidth="100.0" text="127.0.0.1"/>
+                        <TextField fx:id="sendPortTxt" prefWidth="50.0" text="9999"/>
+                        <Button fx:id="bindBtn" mnemonicParsing="false" text="绑定目标"/>
+                        <Button fx:id="stopBindBtn" disable="true" mnemonicParsing="false" text="停止绑定"/>
+                        <Button fx:id="sendBtn" disable="true" mnemonicParsing="false" text="发送信息"/>
+                    </children>
+                </HBox>
+                <TextArea fx:id="sendMsgTxt" prefWidth="100.0"/>
+                <HBox prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <TextField fx:id="recPortTxt" prefWidth="50.0" promptText="9999"/>
+                        <Button fx:id="listenBtn" mnemonicParsing="false" text="开始监听"/>
+                        <Button fx:id="stopListenBtn" disable="true" mnemonicParsing="false" text="停止监听"/>
+                    </children>
+                </HBox>
+                <TextArea editable="false" prefHeight="200.0" prefWidth="200.0"/>
+            </children>
+        </VBox>
+    </content>
+</Tab>
