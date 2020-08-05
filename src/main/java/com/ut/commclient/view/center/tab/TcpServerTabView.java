@@ -1,4 +1,4 @@
-package com.ut.commclient.view;
+package com.ut.commclient.view.center.tab;
 
 import de.felixroske.jfxsupport.AbstractFxmlView;
 import de.felixroske.jfxsupport.FXMLView;
@@ -8,6 +8,6 @@ import de.felixroske.jfxsupport.FXMLView;
  * @author: 黄辉鸿
  * @create: 2020-08-04 20:04
  **/
-@FXMLView(value = "/view/TcpServerTabView.fxml")
+@FXMLView(value = "/view/center/TcpServerTabView.fxml")
 public class TcpServerTabView extends AbstractFxmlView {
 }

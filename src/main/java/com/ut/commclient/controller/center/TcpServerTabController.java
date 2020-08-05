@@ -1,8 +1,10 @@
-package com.ut.commclient.controller;
+package com.ut.commclient.controller.center;
 
+import com.ut.commclient.model.TcpClientModel;
 import de.felixroske.jfxsupport.FXMLController;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
@@ -12,19 +14,17 @@ import java.util.ResourceBundle;
 /**
  * @description:
  * @author: 黄辉鸿
- * @create: 2020-08-04 19:48
+ * @create: 2020-08-04 19:30
  **/
 @FXMLController
-public class UdpDatagramTabController implements Initializable {
-    public TextField ipTxt;
-    public TextField sendPortTxt;
-    public Button bindBtn;
-    public Button stopBindBtn;
+public class TcpServerTabController implements Initializable {
+    public TextField portTxt;
+    public Button beginBtn;
+    public Button stopBtn;
     public Button sendBtn;
     public TextArea sendMsgTxt;
-    public TextField recPortTxt;
-    public Button listenBtn;
-    public Button stopListenBtn;
+    public ListView<TcpClientModel> clientListView;
+    public TextArea recTxt;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

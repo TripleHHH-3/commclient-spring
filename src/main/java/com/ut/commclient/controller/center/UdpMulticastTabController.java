@@ -1,4 +1,4 @@
-package com.ut.commclient.controller;
+package com.ut.commclient.controller.center;
 
 import de.felixroske.jfxsupport.FXMLController;
 import javafx.fxml.Initializable;
@@ -12,17 +12,20 @@ import java.util.ResourceBundle;
 /**
  * @description:
  * @author: 黄辉鸿
- * @create: 2020-08-04 18:50
+ * @create: 2020-08-04 19:50
  **/
 @FXMLController
-public class TcpClientTabController implements Initializable {
-    public TextField ipTxt;
-    public TextField portTxt;
-    public Button beginBtn;
-    public Button stopBtn;
+public class UdpMulticastTabController implements Initializable {
+    public TextField bindIpGroupTxt;
+    public TextField bindPortTxt;
+    public Button bindBeginBtn;
+    public Button bindStopBtn;
     public Button sendBtn;
     public TextArea sendMsgTxt;
-    public TextArea recMsgTxt;
+    public TextField listenIpGroupTxt;
+    public TextField listenPortTxt;
+    public Button listenBeginBtn;
+    public Button listenStopBtn;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
