@@ -13,7 +13,7 @@
                     <children>
                         <TextField fx:id="ipTxt" prefWidth="100.0" text="127.0.0.1"/>
                         <TextField fx:id="portTxt" prefWidth="50.0" text="8998"/>
-                        <Button fx:id="beginBtn" mnemonicParsing="false" onAction="#beginConnect" text="开始连接"/>
+                        <Button fx:id="beginBtn" mnemonicParsing="false" onAction="#connectBegin" text="开始连接"/>
                         <Button fx:id="stopBtn" disable="true" mnemonicParsing="false" text="关闭连接"/>
                         <Button fx:id="sendBtn" disable="true" mnemonicParsing="false" text="发送信息"/>
                     </children>

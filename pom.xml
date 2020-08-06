@@ -11,7 +11,7 @@
     <groupId>com.ut</groupId>
     <artifactId>commclient-spring</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>commclient-spring</name>
+    <name>commClient-spring</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -19,12 +19,14 @@
     </properties>
 
     <dependencies>
+        <!-- javafx spring支持 -->
         <dependency>
             <groupId>de.roskenet</groupId>
             <artifactId>springboot-javafx-support</artifactId>
             <version>2.1.6</version>
         </dependency>
 
+        <!-- javafx test spring支持 -->
         <dependency>
             <groupId>de.roskenet</groupId>
             <artifactId>springboot-javafx-test</artifactId>
@@ -38,23 +40,23 @@
             <version>14.0.1</version>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.openjfx</groupId>-->
-<!--            <artifactId>javafx-graphics</artifactId>-->
-<!--            <version>14.0.1</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.openjfx</groupId>-->
+        <!--            <artifactId>javafx-graphics</artifactId>-->
+        <!--            <version>14.0.1</version>-->
+        <!--        </dependency>-->
 
-<!--        <dependency>-->
-<!--            <groupId>org.openjfx</groupId>-->
-<!--            <artifactId>javafx-base</artifactId>-->
-<!--            <version>14.0.1</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.openjfx</groupId>-->
+        <!--            <artifactId>javafx-base</artifactId>-->
+        <!--            <version>14.0.1</version>-->
+        <!--        </dependency>-->
 
-<!--        <dependency>-->
-<!--            <groupId>com.jfoenix</groupId>-->
-<!--            <artifactId>jfoenix</artifactId>-->
-<!--            <version>9.0.10</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.jfoenix</groupId>-->
+        <!--            <artifactId>jfoenix</artifactId>-->
+        <!--            <version>9.0.10</version>-->
+        <!--        </dependency>-->
 
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -62,29 +64,32 @@
             <version>14.0.1</version>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.openjfx</groupId>-->
-<!--            <artifactId>javafx-base</artifactId>-->
-<!--            <version>14.0.1</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.openjfx</groupId>-->
+        <!--            <artifactId>javafx-base</artifactId>-->
+        <!--            <version>14.0.1</version>-->
+        <!--        </dependency>-->
 
+        <!-- springboot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
 
+        <!-- lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.mapstruct</groupId>-->
-<!--            <artifactId>mapstruct-processor</artifactId>-->
-<!--            <version>1.3.1.Final</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.mapstruct</groupId>-->
+        <!--            <artifactId>mapstruct-processor</artifactId>-->
+        <!--            <version>1.3.1.Final</version>-->
+        <!--        </dependency>-->
 
+        <!-- springboot test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -95,6 +100,19 @@
                     <artifactId>junit-vintage-engine</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <!-- 引入log4j2依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+        </dependency>
+
+        <!-- fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.9</version>
         </dependency>
     </dependencies>
 

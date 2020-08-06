@@ -1,7 +1,6 @@
 package com.ut.commclient.model;
 
-import de.felixroske.jfxsupport.AbstractFxmlView;
-import javafx.scene.control.Tab;
+import javafx.scene.Node;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,5 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TreeViewModel {
     private String name;
-    private Class<? extends AbstractFxmlView> tabClass;
+    private Node stackNode;
 }

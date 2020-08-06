@@ -1,0 +1,19 @@
+javafx:
+  title: Communication Client
+#  appicons:
+  stage:
+    width: 650
+    height:
+    resizable:
+    sytle:
+
+rec-path: src\main\resources\rec\rec.txt
+start-path: src\main\resources\start\start.yml
+task-path: src\main\resources\task\task.yml
+
+heartbeat:
+  echo-client: echo:client
+  echo-server: echo:server
+  time-interval: 5000
+  time-out: 15000
+  time-retry: 1000

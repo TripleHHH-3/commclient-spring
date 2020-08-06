@@ -1,0 +1,12 @@
+javafx:
+  title: Communication Client
+#  appicons:
+  stage:
+    width: 650
+    height:
+    resizable:
+    sytle:
+
+recPath: .\rec\rec.txt
+startPath: .\start\start.yml
+taskPath: .\task\task.yml

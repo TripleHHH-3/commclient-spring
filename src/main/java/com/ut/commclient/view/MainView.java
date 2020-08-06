@@ -1,18 +1,7 @@
 package com.ut.commclient.view;
 
-import com.ut.commclient.model.TreeViewModel;
-import com.ut.commclient.view.center.tab.TcpClientTabView;
-import com.ut.commclient.view.center.tab.TcpServerTabView;
-import com.ut.commclient.view.center.tab.UdpDatagramTabView;
-import com.ut.commclient.view.center.tab.UdpMulticastTabView;
 import de.felixroske.jfxsupport.AbstractFxmlView;
 import de.felixroske.jfxsupport.FXMLView;
-import javafx.scene.Parent;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
-import javafx.scene.control.cell.TextFieldTreeCell;
-import javafx.scene.layout.BorderPane;
-import javafx.util.StringConverter;
 
 
 /**
@@ -22,44 +11,4 @@ import javafx.util.StringConverter;
  **/
 @FXMLView(value = "/view/MainView.fxml")
 public class MainView extends AbstractFxmlView {
-
-    @Override
-    public Parent getView() {
-        BorderPane borderPane = (BorderPane) super.getView();
-        TreeView<TreeViewModel> treeView = (TreeView) borderPane.lookup("#treeView");
-        TreeItem<TreeViewModel> root = new TreeItem<>(new TreeViewModel("ROOT", null));
-
-        TreeItem<TreeViewModel> tcp = new TreeItem<>(new TreeViewModel("TCP", null));
-        TreeItem<TreeViewModel> tcpClient = new TreeItem<>(new TreeViewModel("tcpClient", TcpClientTabView.class));
-        TreeItem<TreeViewModel> tcpServer = new TreeItem<>(new TreeViewModel("tcpServer", TcpServerTabView.class));
-        tcp.getChildren().add(tcpClient);
-        tcp.getChildren().add(tcpServer);
-        tcp.setExpanded(true);
-
-        TreeItem<TreeViewModel> udp = new TreeItem<>(new TreeViewModel("UDP", null));
-        TreeItem<TreeViewModel> udpClient = new TreeItem<>(new TreeViewModel("udpDatagram", UdpDatagramTabView.class));
-        TreeItem<TreeViewModel> udpServer = new TreeItem<>(new TreeViewModel("udpMulticast", UdpMulticastTabView.class));
-        udp.getChildren().add(udpClient);
-        udp.getChildren().add(udpServer);
-        udp.setExpanded(true);
-
-        root.getChildren().add(tcp);
-        root.getChildren().add(udp);
-        treeView.setRoot(root);
-        treeView.setShowRoot(false);
-
-        treeView.setCellFactory(TextFieldTreeCell.forTreeView(new StringConverter<>() {
-            @Override
-            public String toString(TreeViewModel treeViewModel) {
-                return treeViewModel.getName();
-            }
-
-            @Override
-            public TreeViewModel fromString(String s) {
-                return null;
-            }
-        }));
-
-        return borderPane;
-    }
 }

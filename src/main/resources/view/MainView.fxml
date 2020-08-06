@@ -29,7 +29,7 @@
         <TreeView fx:id="treeView" prefWidth="150.0" BorderPane.alignment="CENTER"/>
     </left>
     <center>
-        <StackPane BorderPane.alignment="CENTER">
+        <StackPane fx:id="stackPane" BorderPane.alignment="CENTER">
             <children>
                 <TabPane visible="false">
                     <fx:include source="center/TcpClientTabView.fxml"/>

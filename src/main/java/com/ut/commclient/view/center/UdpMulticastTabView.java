@@ -1,4 +1,4 @@
-package com.ut.commclient.view.center.tab;
+package com.ut.commclient.view.center;
 
 import de.felixroske.jfxsupport.AbstractFxmlView;
 import de.felixroske.jfxsupport.FXMLView;
