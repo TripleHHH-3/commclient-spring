@@ -4,12 +4,14 @@ import com.ut.commclient.view.MainView;
 import de.felixroske.jfxsupport.AbstractJavaFxApplicationSupport;
 import de.felixroske.jfxsupport.SplashScreen;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * @description:
  * @author: 黄辉鸿
  * @create: 2020-08-04 11:49
  **/
+@EnableScheduling
 @SpringBootApplication
 public class CommClientApplication extends AbstractJavaFxApplicationSupport {
 

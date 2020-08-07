@@ -3,17 +3,22 @@ package com.ut.commclient.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+/**
+ * @description:
+ * @author: 黄辉鸿
+ * @create: 2020-08-06 19:26
+ **/
 @Component
 public class HeartBeat {
     /**
      * 用于服务器向客户端发送的心跳包
      */
-    private static String echoClient = "echo:client";
+    private static final String echoClient = "echo:client";
 
     /**
      * 用于客户端向服务器发送的心跳包
      */
-    private static String echoServer = "echo:server";
+    private static final String echoServer = "echo:server";
 
     /**
      * 心跳包发送间隔时间
@@ -30,28 +35,18 @@ public class HeartBeat {
      */
     private static long timeRetry = 1000;
 
-    @Value("${heartbeat.echo-client}")
-    private void setEchoClient(String echoClient) {
-        HeartBeat.echoClient = echoClient;
-    }
-
-    @Value("${heartbeat.echo-server}")
-    private void setEchoServer(String echoServer) {
-        HeartBeat.echoServer = echoServer;
-    }
-
     @Value("${heartbeat.time-interval}")
-    private static void setTimeInterval(long timeInterval) {
+    private void setTimeInterval(long timeInterval) {
         HeartBeat.timeInterval = timeInterval;
     }
 
     @Value("${heartbeat.time-out}")
-    private static void setTimeOut(long timeOut) {
+    private void setTimeOut(long timeOut) {
         HeartBeat.timeOut = timeOut;
     }
 
     @Value("${heartbeat.time-retry}")
-    private static void setTimeRetry(long timeRetry) {
+    private void setTimeRetry(long timeRetry) {
         HeartBeat.timeRetry = timeRetry;
     }
 

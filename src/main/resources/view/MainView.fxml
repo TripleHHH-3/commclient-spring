@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import com.ut.commclient.componet.TabPaneHasList?>
 <BorderPane maxHeight="-Infinity" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.ut.commclient.controller.MainViewController">
     <top>
@@ -29,20 +30,16 @@
         <TreeView fx:id="treeView" prefWidth="150.0" BorderPane.alignment="CENTER"/>
     </left>
     <center>
-        <StackPane fx:id="stackPane" BorderPane.alignment="CENTER">
+        <StackPane BorderPane.alignment="CENTER">
             <children>
-                <TabPane visible="false">
-                    <fx:include source="center/TcpClientTabView.fxml"/>
-                </TabPane>
-                <TabPane visible="false">
-                    <fx:include source="center/TcpServerTabView.fxml"/>
-                </TabPane>
-                <TabPane visible="false">
-                    <fx:include source="center/UdpDatagramTabView.fxml"/>
-                </TabPane>
-                <TabPane visible="false">
-                    <fx:include source="center/UdpMulticastTabView.fxml"/>
-                </TabPane>
+                <TabPaneHasList visible="false" fx:id="tcpClientTabPane">
+                </TabPaneHasList>
+                <TabPaneHasList visible="false" fx:id="tcpServerTabPane">
+                </TabPaneHasList>
+                <TabPaneHasList visible="false" fx:id="udpDatagramTabPane">
+                </TabPaneHasList>
+                <TabPaneHasList visible="false" fx:id="udpMulticastTabPane">
+                </TabPaneHasList>
             </children>
         </StackPane>
     </center>

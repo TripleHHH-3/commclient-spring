@@ -8,13 +8,17 @@ import com.ut.commclient.util.FileUtil;
 import com.ut.commclient.util.ResUtil;
 import de.felixroske.jfxsupport.FXMLController;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -33,6 +37,7 @@ import java.util.TimerTask;
  * @create: 2020-08-04 18:50
  **/
 @Log4j2
+@Getter
 @FXMLController
 public class TcpClientTabController implements Initializable {
     @FXML
@@ -74,10 +79,13 @@ public class TcpClientTabController implements Initializable {
         isStop = false;
 
         //开启线程,连接服务端
-        new Thread(() -> connectToServer(ip, port)).start();
+        new Thread(this::connectToServer).start();
     }
 
-    private void connectToServer(String ip, int port) {
+    public void connectToServer() {
+        String ip = ipTxt.getText();
+        int port = Integer.parseInt(portTxt.getText());
+
         //连接服务器，失败则会一直尝试重连
         for (int i = 1; ; i++) {
             try {
@@ -109,53 +117,50 @@ public class TcpClientTabController implements Initializable {
         recMsgTxt.appendText("连接成功" + "\n");
 
         //开启接收信息线程
-        new Thread(() -> {
-            try {
-                //构造输入流
-                reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
-                char[] chars = new char[1024];
+        new Thread(this::recMsgThread).start();
 
-                //循环读取，此处会阻塞
-                int len;
-                while ((len = reader.read(chars)) != -1) {
-                    //读出来并打印
-                    String msg = new String(chars, 0, len);
+        //初始化心跳包时间
+        lastEchoTime = System.currentTimeMillis();
 
-                    //如果收到心跳包则进行相应的处理并忽略此信息
-                    if (msg.equals(HeartBeat.getEchoServer()) || msg.equals(HeartBeat.getEchoClient())) {
-                        System.out.println(msg);
-                        heartBeatHandler(msg);
-                        continue;
-                    }
+    }
 
-                    recMsgTxt.appendText(msg + "\n");
+    private void recMsgThread() {
+        try {
+            //构造输入流
+            reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+            char[] chars = new char[1024];
+
+            //循环读取，此处会阻塞
+            int len;
+            while ((len = reader.read(chars)) != -1) {
+                //读出来并打印
+                String msg = new String(chars, 0, len);
+
+                //如果收到心跳包则进行相应的处理并忽略此信息
+                if (msg.equals(HeartBeat.getEchoServer()) || msg.equals(HeartBeat.getEchoClient())) {
                     System.out.println(msg);
-
-                    //写入文件
-                    RecModel recModel = new RecModel("Server",
-                            socket.getInetAddress().getHostAddress(),
-                            socket.getPort(),
-                            "client",
-                            socket.getLocalAddress().getHostAddress(),
-                            socket.getLocalPort(),
-                            msg);
-                    FileUtil.write(Config.getRecPath(), recModel);
+                    heartBeatHandler(msg);
+                    continue;
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                log.error(e);
-                ResUtil.closeReader(reader);
-            }
-        }).start();
 
-        //开启心跳线程任务
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                heartBeat(ip, port, timer);
+                recMsgTxt.appendText(msg + "\n");
+                System.out.println(msg);
+
+                //写入文件
+                RecModel recModel = new RecModel("Server",
+                        socket.getInetAddress().getHostAddress(),
+                        socket.getPort(),
+                        "client",
+                        socket.getLocalAddress().getHostAddress(),
+                        socket.getLocalPort(),
+                        msg);
+                FileUtil.write(Config.getRecPath(), recModel);
             }
-        }, 0, HeartBeat.getTimeInterval());
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e);
+            ResUtil.closeReader(reader);
+        }
     }
 
     private void heartBeatHandler(String heartBeatStr) {
@@ -167,25 +172,23 @@ public class TcpClientTabController implements Initializable {
         }
     }
 
-    private void heartBeat(String ip, int port, Timer timer) {
-        if (socket == null || socket.isClosed()) {
-            timer.cancel();
-            return;
-        }
+    public void connectEnd(ActionEvent actionEvent) {
+        isStop = true;
+        beginBtn.setDisable(false);
+        stopBtn.setDisable(true);
+        sendBtn.setDisable(true);
+        recMsgTxt.appendText("停止连接" + "\n");
 
-        //先初始化第一次时间
-        lastEchoTime = System.currentTimeMillis();
-        //如果心跳超时则停止连接并且重新尝试连接
-        if (System.currentTimeMillis() - lastEchoTime > HeartBeat.getTimeOut()) {
-            timer.cancel();
-            recMsgTxt.appendText("对方断线" + "\n");
-            sendBtn.setDisable(true);
-            ResUtil.closeWriterAndReaderAndSocket(reader, writer, socket);
-            //新开启线程，重新连接服务端
-            new Thread(() -> connectToServer(ip, port)).start();
-        } else {
-            //发送心跳包
-            writer.writeFlush(HeartBeat.getEchoServer());
-        }
+        ResUtil.closeWriterAndReaderAndSocket(reader, writer, socket);
+    }
+
+    public void sendMsg(ActionEvent actionEvent) {
+        String msg = sendMsgTxt.getText();
+        writer.writeFlush(msg);
+    }
+
+    public void closeBefore(Event event) {
+        isStop = true;
+        ResUtil.closeWriterAndReaderAndSocket(reader, writer, socket);
     }
 }

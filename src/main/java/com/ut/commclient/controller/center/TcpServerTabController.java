@@ -1,13 +1,26 @@
 package com.ut.commclient.controller.center;
 
+import com.ut.commclient.common.BufferedWriterLock;
+import com.ut.commclient.config.HeartBeat;
+import com.ut.commclient.controller.MainViewController;
 import com.ut.commclient.model.TcpClientModel;
+import com.ut.commclient.thread.TcpServerThread;
+import com.ut.commclient.util.ResUtil;
 import de.felixroske.jfxsupport.FXMLController;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.OutputStreamWriter;
+import java.net.BindException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -16,18 +29,79 @@ import java.util.ResourceBundle;
  * @author: 黄辉鸿
  * @create: 2020-08-04 19:30
  **/
+@Log4j2
+@Getter
 @FXMLController
 public class TcpServerTabController implements Initializable {
-    public TextField portTxt;
-    public Button beginBtn;
-    public Button stopBtn;
-    public Button sendBtn;
-    public TextArea sendMsgTxt;
-    public ListView<TcpClientModel> clientListView;
-    public TextArea recTxt;
+    @FXML
+    private TextField portTxt;
+    @FXML
+    private Button beginBtn;
+    @FXML
+    private Button stopBtn;
+    @FXML
+    private Button sendBtn;
+    @FXML
+    private TextArea sendMsgTxt;
+    @FXML
+    private ListView<TcpClientModel> clientListView;
+    @FXML
+    private TextArea recTxt;
+
+    private ServerSocket serverSocket;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+    }
 
+    public void listenBegin(ActionEvent actionEvent) {
+        //todo 校验
+        int port = Integer.parseInt(portTxt.getText());
+        beginBtn.setDisable(true);
+        sendBtn.setDisable(false);
+
+        //开启监听线程
+        new Thread(() -> {
+            try {
+                //服务端在xxx端口监听客户端的TCP连接请求
+                serverSocket = new ServerSocket(port);
+
+                stopBtn.setDisable(false);
+
+                while (true) {
+                    //等待客户端的连接，会阻塞
+                    Socket client = serverSocket.accept();
+
+                    //打印成功连接
+                    recTxt.appendText("与客户端连接成功！" + client.getInetAddress().getHostAddress() + "\n");
+
+                    //把连接进来的客户端放进队列
+                    TcpClientModel tcpClientModel = new TcpClientModel(
+                            client.getInetAddress().getHostAddress(),
+                            client.getPort(),
+                            client,
+                            new BufferedWriterLock(new OutputStreamWriter(client.getOutputStream())),
+                            System.currentTimeMillis()
+                    );
+
+                    Platform.runLater(() -> clientListView.getItems().add(tcpClientModel));
+
+                    //为每个客户端的连接开启一个线程
+                    new Thread(new TcpServerThread(serverSocket, client, recTxt, clientListView)).start();
+                }
+
+            } catch (Exception e) {
+                if (e instanceof BindException) recTxt.appendText("端口已占用" + "\n");
+
+                beginBtn.setDisable(false);
+                stopBtn.setDisable(true);
+                recTxt.appendText("停止监听" + "\n");
+
+                ResUtil.closeServerSocket(serverSocket);
+                e.printStackTrace();
+                log.error(e);
+            }
+
+        }).start();
     }
 }

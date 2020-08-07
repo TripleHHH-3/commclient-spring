@@ -1,6 +1,6 @@
 javafx:
   title: Communication Client
-#  appicons:
+  #  appicons:
   stage:
     width: 650
     height:
@@ -12,8 +12,13 @@ start-path: src\main\resources\start\start.yml
 task-path: src\main\resources\task\task.yml
 
 heartbeat:
-  echo-client: echo:client
-  echo-server: echo:server
   time-interval: 5000
   time-out: 15000
   time-retry: 1000
+
+#spring 默认单线程执行定时任务，必须配置线程池，否则会踩坑
+spring:
+  task:
+    scheduling:
+      pool:
+        size: 10
