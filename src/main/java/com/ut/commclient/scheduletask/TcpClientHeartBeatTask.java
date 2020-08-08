@@ -1,15 +1,18 @@
 package com.ut.commclient.scheduletask;
 
 import com.ut.commclient.config.HeartBeat;
+import com.ut.commclient.contant.KeyName;
 import com.ut.commclient.controller.MainViewController;
 import com.ut.commclient.controller.center.TcpClientTabController;
 import com.ut.commclient.util.ListUtil;
 import com.ut.commclient.util.ResUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.util.List;
 
@@ -19,13 +22,15 @@ import java.util.List;
  * @create: 2020-08-07 14:32
  **/
 @Component
+@EnableAsync
 public class TcpClientHeartBeatTask {
     @Autowired
     private MainViewController mainViewController;
 
+    @Async
     @Scheduled(initialDelayString = "${heartbeat.time-interval}", fixedDelayString = "${heartbeat.time-interval}")
     public void task() {
-        List<TcpClientTabController> tabControllerList = mainViewController.getTcpClientTabPane().getTabControllerList();
+        List<TcpClientTabController> tabControllerList = (List<TcpClientTabController>) mainViewController.getTcpClientTabPane().getProperties().get(KeyName.CONTROLLER_LIST);
         //当列表大于0时
         if (ListUtil.gtZero(tabControllerList)) {
 
@@ -45,7 +50,11 @@ public class TcpClientHeartBeatTask {
                             controller.connectToServer();
                         } else {
                             //没有超时则发送心跳包
-                            controller.getWriter().writeFlush(HeartBeat.getEchoServer());
+                            try {
+                                controller.getWriter().writeFlush(HeartBeat.getEchoServer());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
 

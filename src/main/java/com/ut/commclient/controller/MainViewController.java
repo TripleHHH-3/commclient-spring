@@ -1,14 +1,10 @@
 package com.ut.commclient.controller;
 
-import com.ut.commclient.componet.TabPaneHasList;
-import com.ut.commclient.controller.center.TcpClientTabController;
-import com.ut.commclient.controller.center.TcpServerTabController;
-import com.ut.commclient.controller.center.UdpDatagramTabController;
-import com.ut.commclient.controller.center.UdpMulticastTabController;
 import com.ut.commclient.model.TreeViewModel;
 import de.felixroske.jfxsupport.FXMLController;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeView;
 import lombok.Getter;
 
@@ -24,13 +20,13 @@ import java.util.ResourceBundle;
 @FXMLController
 public class MainViewController implements Initializable {
     @FXML
-    private TabPaneHasList<TcpClientTabController> tcpClientTabPane;
+    private TabPane tcpClientTabPane;
     @FXML
-    private TabPaneHasList<TcpServerTabController> tcpServerTabPane;
+    private TabPane tcpServerTabPane;
     @FXML
-    private TabPaneHasList<UdpDatagramTabController> udpDatagramTabPane;
+    private TabPane udpDatagramTabPane;
     @FXML
-    private TabPaneHasList<UdpMulticastTabController> udpMulticastTabPane;
+    private TabPane udpMulticastTabPane;
     @FXML
     private TreeView<TreeViewModel> treeView;
 

@@ -6,21 +6,19 @@ import com.ut.commclient.config.HeartBeat;
 import com.ut.commclient.model.RecModel;
 import com.ut.commclient.util.FileUtil;
 import com.ut.commclient.util.ResUtil;
-import de.felixroske.jfxsupport.FXMLController;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.InetAddress;
@@ -28,8 +26,6 @@ import java.net.Socket;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * @description:
@@ -167,7 +163,11 @@ public class TcpClientTabController implements Initializable {
         if (heartBeatStr.equals(HeartBeat.getEchoServer())) {
             lastEchoTime = System.currentTimeMillis();
         } else {
-            writer.writeFlush(HeartBeat.getEchoClient() + ":" + socket.getLocalAddress().getHostAddress() + ":" + socket.getLocalPort());
+            try {
+                writer.writeFlush(HeartBeat.getEchoClient() + ":" + socket.getLocalAddress().getHostAddress() + ":" + socket.getLocalPort());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -183,7 +183,11 @@ public class TcpClientTabController implements Initializable {
 
     public void sendMsg(ActionEvent actionEvent) {
         String msg = sendMsgTxt.getText();
-        writer.writeFlush(msg);
+        try {
+            writer.writeFlush(msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void closeBefore(Event event) {

@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import com.ut.commclient.componet.TabPaneHasList?>
 <BorderPane maxHeight="-Infinity" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.ut.commclient.controller.MainViewController">
     <top>
@@ -36,14 +35,14 @@
     <center>
         <StackPane BorderPane.alignment="CENTER">
             <children>
-                <TabPaneHasList visible="false" fx:id="tcpClientTabPane">
-                </TabPaneHasList>
-                <TabPaneHasList visible="false" fx:id="tcpServerTabPane">
-                </TabPaneHasList>
-                <TabPaneHasList visible="false" fx:id="udpDatagramTabPane">
-                </TabPaneHasList>
-                <TabPaneHasList visible="false" fx:id="udpMulticastTabPane">
-                </TabPaneHasList>
+                <TabPane visible="false" fx:id="tcpClientTabPane">
+                </TabPane>
+                <TabPane visible="false" fx:id="tcpServerTabPane">
+                </TabPane>
+                <TabPane visible="false" fx:id="udpDatagramTabPane">
+                </TabPane>
+                <TabPane visible="false" fx:id="udpMulticastTabPane">
+                </TabPane>
             </children>
         </StackPane>
     </center>

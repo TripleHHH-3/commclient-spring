@@ -1,13 +1,10 @@
 package com.ut.commclient.controller.center;
 
 import com.ut.commclient.common.BufferedWriterLock;
-import com.ut.commclient.componet.TabPaneHasList;
-import com.ut.commclient.config.HeartBeat;
-import com.ut.commclient.controller.MainViewController;
+import com.ut.commclient.contant.KeyName;
 import com.ut.commclient.model.TcpClientModel;
 import com.ut.commclient.thread.TcpServerThread;
 import com.ut.commclient.util.ResUtil;
-import de.felixroske.jfxsupport.FXMLController;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,13 +16,14 @@ import javafx.scene.control.cell.TextFieldListCell;
 import javafx.util.StringConverter;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -144,13 +142,17 @@ public class TcpServerTabController implements Initializable {
         //todo 弹出提示未选择客户端
         TcpClientModel client = clientListView.getSelectionModel().getSelectedItem();
         if (client != null) {
-            client.getWriter().writeFlush(sendMsgTxt.getText());
+            try {
+                client.getWriter().writeFlush(sendMsgTxt.getText());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public void beforeClose(Event event) {
         //关闭tab之前，释放套接口资源，同时在tabPane移除对应的controller
         listenEnd(null);
-        ((TabPaneHasList) tcpServerTab.getTabPane()).removeTab(this);
+        ((List) tcpServerTab.getTabPane().getProperties().get(KeyName.CONTROLLER_LIST)).remove(this);
     }
 }

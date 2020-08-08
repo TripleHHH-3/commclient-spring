@@ -9,12 +9,8 @@ public class BufferedWriterLock extends BufferedWriter {
         super(out);
     }
 
-    public synchronized void writeFlush(String str) {
-        try {
-            super.write(str);
-            super.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public synchronized void writeFlush(String str) throws IOException {
+        super.write(str);
+        super.flush();
     }
 }

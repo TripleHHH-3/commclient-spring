@@ -10,6 +10,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -76,7 +77,11 @@ public class TcpServerThread implements Runnable {
         if (split[1].equals("server")) {
             clientListView.getItems().forEach(client -> {
                 if (client.getSocket().equals(this.client)) {
-                    client.getWriter().writeFlush(HeartBeat.getEchoServer());
+                    try {
+                        client.getWriter().writeFlush(HeartBeat.getEchoServer());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         } else {

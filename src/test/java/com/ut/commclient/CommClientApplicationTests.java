@@ -1,20 +1,25 @@
 package com.ut.commclient;
 
-import javafx.fxml.FXMLLoader;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 @SpringBootTest
 class CommClientApplicationTests {
 
     @Test
     void contextLoads() throws IOException {
-        FXMLLoader UdpDatagramTabLoader = new FXMLLoader(getClass().getResource("/view/center/UdpDatagramTabView.fxml"));
-        Object load = UdpDatagramTabLoader.load();
-        Object load1 = UdpDatagramTabLoader.load();
-        System.out.println(load.equals(load1));
+        ArrayList<Integer> integers = new ArrayList<>();
+        for (int i = 0; i < 1000; i++) {
+            integers.add(i);
+        }
+        integers.forEach(integer -> {
+            if (integer > 200 && (integer % 5 == 5)) {
+                integers.remove(integer);
+            }
+        });
     }
 
 }

@@ -1,20 +1,22 @@
 package com.ut.commclient.scheduletask;
 
-import com.ut.commclient.componet.TabPaneHasList;
 import com.ut.commclient.config.HeartBeat;
+import com.ut.commclient.contant.KeyName;
 import com.ut.commclient.controller.MainViewController;
 import com.ut.commclient.controller.center.TcpServerTabController;
 import com.ut.commclient.model.TcpClientModel;
 import com.ut.commclient.util.ListUtil;
-import com.ut.commclient.util.ResUtil;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,14 +25,17 @@ import java.util.List;
  * @create: 2020-08-07 19:29
  **/
 @Component
+@EnableAsync
 public class TcpServerHeartBeatTask {
     @Autowired
     private MainViewController mainViewController;
 
+
+    @Async
     //此任务需两层嵌套遍历，分别是每一个tab和tab里面的listView
     @Scheduled(initialDelayString = "${heartbeat.time-interval}", fixedDelayString = "${heartbeat.time-interval}")
     public void task() {
-        List<TcpServerTabController> tabControllerList = mainViewController.getTcpServerTabPane().getTabControllerList();
+        List<TcpServerTabController> tabControllerList = (List<TcpServerTabController>) mainViewController.getTcpServerTabPane().getProperties().get(KeyName.CONTROLLER_LIST);
 
         if (ListUtil.gtZero(tabControllerList)) {
             synchronized (tabControllerList) {
@@ -41,23 +46,26 @@ public class TcpServerHeartBeatTask {
                     if (serverSocket != null && !serverSocket.isClosed()) {
 
                         ObservableList<TcpClientModel> clientList = controller.getClientListView().getItems();
+                        //第二层遍历listView
                         if (ListUtil.gtZero(clientList)) {
-
-                            //第二层遍历listView
+                            List<TcpClientModel> downClients = new ArrayList<>();
                             clientList.forEach(client -> {
-
-                                //心跳时间超时则把客户端从列表移除
-                                if (System.currentTimeMillis() - client.getLastRecTime() > HeartBeat.getTimeOut()) {
-                                    ResUtil.closeWriterAndSocket(client.getWriter(), client.getSocket());
-                                    Platform.runLater(() -> clientList.remove(client));
+                                //心跳超时加入移除列表
+                                if ((System.currentTimeMillis() - client.getLastRecTime() > HeartBeat.getTimeOut())) {
+                                    downClients.add(client);
+                                } else {
+                                    //给为超时的客户端发送心跳
+                                    try {
+                                        client.getWriter().writeFlush(HeartBeat.getEchoClient());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                        downClients.add(client);
+                                    }
                                 }
                             });
-                        }
-
-                        //剩下的未超时的客户端继续发心跳包
-                        if (ListUtil.gtZero(clientList)) {
-                            synchronized (clientList) {
-                                clientList.forEach(client -> client.getWriter().writeFlush(HeartBeat.getEchoClient()));
+                            //把心跳时间超时的客户端从列表移除
+                            if (downClients.size() > 0) {
+                                downClients.forEach(client -> Platform.runLater(() -> clientList.remove(client)));
                             }
                         }
                     }

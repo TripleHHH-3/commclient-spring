@@ -1,10 +1,6 @@
 package com.ut.commclient.view;
 
-import com.ut.commclient.componet.TabPaneHasList;
-import com.ut.commclient.controller.center.TcpClientTabController;
-import com.ut.commclient.controller.center.TcpServerTabController;
-import com.ut.commclient.controller.center.UdpDatagramTabController;
-import com.ut.commclient.controller.center.UdpMulticastTabController;
+import com.ut.commclient.contant.KeyName;
 import com.ut.commclient.model.TreeViewModel;
 import de.felixroske.jfxsupport.AbstractFxmlView;
 import de.felixroske.jfxsupport.FXMLView;
@@ -14,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.TextFieldTreeCell;
@@ -21,7 +18,11 @@ import javafx.scene.layout.StackPane;
 import javafx.util.StringConverter;
 import lombok.SneakyThrows;
 
-import java.net.URL;
+import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 
 /**
@@ -31,49 +32,35 @@ import java.net.URL;
  **/
 @FXMLView(value = "/view/MainView.fxml")
 public class MainView extends AbstractFxmlView {
-
-    @Override
     @SneakyThrows
-    public Parent getView() {
-        Parent parent = super.getView();
+    @PostConstruct
+    private void initView() {
+        //初始化四个tabPane
+        TabPane tcpClientTabPane = initTabPane("#tcpClientTabPane", "/view/center/TcpClientTabView.fxml");
+        TabPane tcpServerTabPane = initTabPane("#tcpServerTabPane", "/view/center/TcpServerTabView.fxml");
+        TabPane udpDatagramTabPane = initTabPane("#udpDatagramTabPane", "/view/center/UdpDatagramTabView.fxml");
+        TabPane udpMulticastTabPane = initTabPane("#udpMulticastTabPane", "/view/center/UdpMulticastTabView.fxml");
 
-        //找到每个TabPane，添加相应的Tab和controller
-        TabPaneHasList<TcpClientTabController> tcpClientTabPane = (TabPaneHasList) parent.lookup("#tcpClientTabPane");
-        FXMLLoader tcpClientTabLoader = new FXMLLoader(getClass().getResource("/view/center/TcpClientTabView.fxml"));
-        tcpClientTabPane.addTab(tcpClientTabLoader.load(), tcpClientTabLoader.getController());
-
-        TabPaneHasList<TcpServerTabController> tcpServerTabPane = (TabPaneHasList) parent.lookup("#tcpServerTabPane");
-        FXMLLoader tcpServerTabLoader = new FXMLLoader(getClass().getResource("/view/center/TcpServerTabView.fxml"));
-        tcpServerTabPane.addTab(tcpServerTabLoader.load(), tcpServerTabLoader.getController());
-
-        TabPaneHasList<UdpDatagramTabController> udpDatagramTabPane = (TabPaneHasList) parent.lookup("#udpDatagramTabPane");
-        FXMLLoader udpDatagramTabLoader = new FXMLLoader(getClass().getResource("/view/center/UdpDatagramTabView.fxml"));
-        udpDatagramTabPane.addTab(udpDatagramTabLoader.load(), udpDatagramTabLoader.getController());
-
-        TabPaneHasList<UdpMulticastTabController> udpMulticastTabPane = (TabPaneHasList) parent.lookup("#udpMulticastTabPane");
-        FXMLLoader udpMulticastTabLoader = new FXMLLoader(getClass().getResource("/view/center/UdpMulticastTabView.fxml"));
-        udpMulticastTabPane.addTab(udpMulticastTabLoader.load(), udpMulticastTabLoader.getController());
-
-        TreeView<TreeViewModel> treeView = (TreeView) parent.lookup("#treeView");
+        TreeView<TreeViewModel> treeView = (TreeView) super.getView().lookup("#treeView");
 
         //treeView的TCP节点
-        TreeItem<TreeViewModel> tcp = new TreeItem<>(new TreeViewModel("TCP", null,null));
-        TreeItem<TreeViewModel> tcpClient = new TreeItem<>(new TreeViewModel("tcpClient", tcpClientTabPane,tcpClientTabLoader.getLocation()));
-        TreeItem<TreeViewModel> tcpServer = new TreeItem<>(new TreeViewModel("tcpServer", tcpServerTabPane,tcpServerTabLoader.getLocation()));
+        TreeItem<TreeViewModel> tcp = new TreeItem<>(new TreeViewModel("TCP", null));
+        TreeItem<TreeViewModel> tcpClient = new TreeItem<>(new TreeViewModel("tcpClient", tcpClientTabPane));
+        TreeItem<TreeViewModel> tcpServer = new TreeItem<>(new TreeViewModel("tcpServer", tcpServerTabPane));
         tcp.getChildren().add(tcpClient);
         tcp.getChildren().add(tcpServer);
         tcp.setExpanded(true);
 
         //treeView的UDP节点
-        TreeItem<TreeViewModel> udp = new TreeItem<>(new TreeViewModel("UDP", null,null));
-        TreeItem<TreeViewModel> udpClient = new TreeItem<>(new TreeViewModel("udpDatagram", udpDatagramTabPane,udpDatagramTabLoader.getLocation()));
-        TreeItem<TreeViewModel> udpServer = new TreeItem<>(new TreeViewModel("udpMulticast", udpMulticastTabPane,udpMulticastTabLoader.getLocation()));
+        TreeItem<TreeViewModel> udp = new TreeItem<>(new TreeViewModel("UDP", null));
+        TreeItem<TreeViewModel> udpClient = new TreeItem<>(new TreeViewModel("udpDatagram", udpDatagramTabPane));
+        TreeItem<TreeViewModel> udpServer = new TreeItem<>(new TreeViewModel("udpMulticast", udpMulticastTabPane));
         udp.getChildren().add(udpClient);
         udp.getChildren().add(udpServer);
         udp.setExpanded(true);
 
         //treeView的根节点
-        TreeItem<TreeViewModel> root = new TreeItem<>(new TreeViewModel("ROOT", null,null));
+        TreeItem<TreeViewModel> root = new TreeItem<>(new TreeViewModel("ROOT", null));
         root.getChildren().add(tcp);
         root.getChildren().add(udp);
         treeView.setRoot(root);
@@ -108,7 +95,23 @@ public class MainView extends AbstractFxmlView {
                 children.get(children.size() - 2).setVisible(false);
             }
         });
+    }
 
-        return parent;
+    private TabPane initTabPane(String id, String path) throws IOException {
+        //拿到根视图
+        Parent parent = super.getView();
+        //根据ID拿到tabPane
+        TabPane tabPane = (TabPane) parent.lookup(id);
+        //获得tab加载器
+        FXMLLoader tabLoader = new FXMLLoader(getClass().getResource(path));
+        //加载tab并添加到tabPane
+        tabPane.getTabs().add(tabLoader.load());
+        //把tab对应的controller放到tabPane的map
+        Object controller = tabLoader.getController();
+        tabPane.getProperties().put(KeyName.CONTROLLER_LIST, Collections.synchronizedList(new ArrayList<>(Arrays.asList(controller))));
+        //把tab的URL存到tabPane的map，方便listView的菜单使用
+        tabPane.getProperties().put(KeyName.TAB_URL, tabLoader.getLocation());
+
+        return tabPane;
     }
 }

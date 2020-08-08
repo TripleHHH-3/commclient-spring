@@ -36,3 +36,7 @@
 {"fromType":"Server","formIp":"127.0.0.1","formPort":8998,"toType":"client","toIp":"127.0.0.1","toPort":65405,"content":"echo:clientecho:server"}
 {"fromType":"Server","formIp":"127.0.0.1","formPort":8998,"toType":"client","toIp":"127.0.0.1","toPort":65454,"content":"echo:clientecho:client"}
 {"fromType":"Server","formIp":"127.0.0.1","formPort":8998,"toType":"client","toIp":"127.0.0.1","toPort":65454,"content":"echo:clientecho:client"}
+{"fromType":"Server","formIp":"127.0.0.1","formPort":8999,"toType":"client","toIp":"127.0.0.1","toPort":53556,"content":"echo:clientecho:server"}
+{"fromType":"Server","formIp":"127.0.0.1","formPort":8998,"toType":"client","toIp":"127.0.0.1","toPort":53533,"content":"echo:clientecho:server"}
+{"fromType":"Server","formIp":"127.0.0.1","formPort":8998,"toType":"client","toIp":"127.0.0.1","toPort":53716,"content":"echo:serverecho:client"}
+{"fromType":"Server","formIp":"127.0.0.1","formPort":8997,"toType":"client","toIp":"127.0.0.1","toPort":54303,"content":"echo:clientecho:server"}
