@@ -21,6 +21,8 @@ import javafx.scene.layout.StackPane;
 import javafx.util.StringConverter;
 import lombok.SneakyThrows;
 
+import java.net.URL;
+
 
 /**
  * @description:
@@ -34,45 +36,44 @@ public class MainView extends AbstractFxmlView {
     @SneakyThrows
     public Parent getView() {
         Parent parent = super.getView();
-        FXMLLoader fxmlLoader;
 
         //找到每个TabPane，添加相应的Tab和controller
         TabPaneHasList<TcpClientTabController> tcpClientTabPane = (TabPaneHasList) parent.lookup("#tcpClientTabPane");
-        fxmlLoader = new FXMLLoader(getClass().getResource("/view/center/TcpClientTabView.fxml"));
-        tcpClientTabPane.addTab(fxmlLoader.load(), fxmlLoader.getController());
+        FXMLLoader tcpClientTabLoader = new FXMLLoader(getClass().getResource("/view/center/TcpClientTabView.fxml"));
+        tcpClientTabPane.addTab(tcpClientTabLoader.load(), tcpClientTabLoader.getController());
 
         TabPaneHasList<TcpServerTabController> tcpServerTabPane = (TabPaneHasList) parent.lookup("#tcpServerTabPane");
-        fxmlLoader = new FXMLLoader(getClass().getResource("/view/center/TcpServerTabView.fxml"));
-        tcpServerTabPane.addTab(fxmlLoader.load(), fxmlLoader.getController());
+        FXMLLoader tcpServerTabLoader = new FXMLLoader(getClass().getResource("/view/center/TcpServerTabView.fxml"));
+        tcpServerTabPane.addTab(tcpServerTabLoader.load(), tcpServerTabLoader.getController());
 
         TabPaneHasList<UdpDatagramTabController> udpDatagramTabPane = (TabPaneHasList) parent.lookup("#udpDatagramTabPane");
-        fxmlLoader = new FXMLLoader(getClass().getResource("/view/center/UdpDatagramTabView.fxml"));
-        udpDatagramTabPane.addTab(fxmlLoader.load(), fxmlLoader.getController());
+        FXMLLoader udpDatagramTabLoader = new FXMLLoader(getClass().getResource("/view/center/UdpDatagramTabView.fxml"));
+        udpDatagramTabPane.addTab(udpDatagramTabLoader.load(), udpDatagramTabLoader.getController());
 
         TabPaneHasList<UdpMulticastTabController> udpMulticastTabPane = (TabPaneHasList) parent.lookup("#udpMulticastTabPane");
-        fxmlLoader = new FXMLLoader(getClass().getResource("/view/center/UdpMulticastTabView.fxml"));
-        udpMulticastTabPane.addTab(fxmlLoader.load(), fxmlLoader.getController());
+        FXMLLoader udpMulticastTabLoader = new FXMLLoader(getClass().getResource("/view/center/UdpMulticastTabView.fxml"));
+        udpMulticastTabPane.addTab(udpMulticastTabLoader.load(), udpMulticastTabLoader.getController());
 
         TreeView<TreeViewModel> treeView = (TreeView) parent.lookup("#treeView");
 
         //treeView的TCP节点
-        TreeItem<TreeViewModel> tcp = new TreeItem<>(new TreeViewModel("TCP", null));
-        TreeItem<TreeViewModel> tcpClient = new TreeItem<>(new TreeViewModel("tcpClient", tcpClientTabPane));
-        TreeItem<TreeViewModel> tcpServer = new TreeItem<>(new TreeViewModel("tcpServer", tcpServerTabPane));
+        TreeItem<TreeViewModel> tcp = new TreeItem<>(new TreeViewModel("TCP", null,null));
+        TreeItem<TreeViewModel> tcpClient = new TreeItem<>(new TreeViewModel("tcpClient", tcpClientTabPane,tcpClientTabLoader.getLocation()));
+        TreeItem<TreeViewModel> tcpServer = new TreeItem<>(new TreeViewModel("tcpServer", tcpServerTabPane,tcpServerTabLoader.getLocation()));
         tcp.getChildren().add(tcpClient);
         tcp.getChildren().add(tcpServer);
         tcp.setExpanded(true);
 
         //treeView的UDP节点
-        TreeItem<TreeViewModel> udp = new TreeItem<>(new TreeViewModel("UDP", null));
-        TreeItem<TreeViewModel> udpClient = new TreeItem<>(new TreeViewModel("udpDatagram", udpDatagramTabPane));
-        TreeItem<TreeViewModel> udpServer = new TreeItem<>(new TreeViewModel("udpMulticast", udpMulticastTabPane));
+        TreeItem<TreeViewModel> udp = new TreeItem<>(new TreeViewModel("UDP", null,null));
+        TreeItem<TreeViewModel> udpClient = new TreeItem<>(new TreeViewModel("udpDatagram", udpDatagramTabPane,udpDatagramTabLoader.getLocation()));
+        TreeItem<TreeViewModel> udpServer = new TreeItem<>(new TreeViewModel("udpMulticast", udpMulticastTabPane,udpMulticastTabLoader.getLocation()));
         udp.getChildren().add(udpClient);
         udp.getChildren().add(udpServer);
         udp.setExpanded(true);
 
         //treeView的根节点
-        TreeItem<TreeViewModel> root = new TreeItem<>(new TreeViewModel("ROOT", null));
+        TreeItem<TreeViewModel> root = new TreeItem<>(new TreeViewModel("ROOT", null,null));
         root.getChildren().add(tcp);
         root.getChildren().add(udp);
         treeView.setRoot(root);

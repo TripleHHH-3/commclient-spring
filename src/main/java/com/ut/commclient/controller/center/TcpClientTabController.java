@@ -38,7 +38,6 @@ import java.util.TimerTask;
  **/
 @Log4j2
 @Getter
-@FXMLController
 public class TcpClientTabController implements Initializable {
     @FXML
     private TextField ipTxt;

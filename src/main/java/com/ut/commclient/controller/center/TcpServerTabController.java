@@ -1,6 +1,7 @@
 package com.ut.commclient.controller.center;
 
 import com.ut.commclient.common.BufferedWriterLock;
+import com.ut.commclient.componet.TabPaneHasList;
 import com.ut.commclient.config.HeartBeat;
 import com.ut.commclient.controller.MainViewController;
 import com.ut.commclient.model.TcpClientModel;
@@ -10,9 +11,12 @@ import de.felixroske.jfxsupport.FXMLController;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.TextFieldListCell;
+import javafx.util.StringConverter;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +35,9 @@ import java.util.ResourceBundle;
  **/
 @Log4j2
 @Getter
-@FXMLController
 public class TcpServerTabController implements Initializable {
+    @FXML
+    private Tab tcpServerTab;
     @FXML
     private TextField portTxt;
     @FXML
@@ -52,6 +57,18 @@ public class TcpServerTabController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        //clientListView的显示转换
+        clientListView.setCellFactory(TextFieldListCell.forListView(new StringConverter<>() {
+            @Override
+            public String toString(TcpClientModel tcpClientModel) {
+                return tcpClientModel.getIp() + ":" + tcpClientModel.getPort();
+            }
+
+            @Override
+            public TcpClientModel fromString(String s) {
+                return null;
+            }
+        }));
     }
 
     public void listenBegin(ActionEvent actionEvent) {
@@ -103,5 +120,37 @@ public class TcpServerTabController implements Initializable {
             }
 
         }).start();
+    }
+
+    public void listenEnd(ActionEvent actionEvent) {
+        //关闭服务端
+        ResUtil.closeServerSocket(serverSocket);
+
+        //关闭客户端
+        ObservableList<TcpClientModel> clientList = clientListView.getItems();
+        if (clientList != null && clientList.size() > 0) {
+            clientList.forEach(client -> {
+                ResUtil.closeWriterAndSocket(client.getWriter(), client.getSocket());
+                Platform.runLater(() -> clientList.remove(client));
+            });
+        }
+
+        beginBtn.setDisable(false);
+        stopBtn.setDisable(true);
+        sendBtn.setDisable(true);
+    }
+
+    public void sendMsg(ActionEvent actionEvent) {
+        //todo 弹出提示未选择客户端
+        TcpClientModel client = clientListView.getSelectionModel().getSelectedItem();
+        if (client != null) {
+            client.getWriter().writeFlush(sendMsgTxt.getText());
+        }
+    }
+
+    public void beforeClose(Event event) {
+        //关闭tab之前，释放套接口资源，同时在tabPane移除对应的controller
+        listenEnd(null);
+        ((TabPaneHasList) tcpServerTab.getTabPane()).removeTab(this);
     }
 }

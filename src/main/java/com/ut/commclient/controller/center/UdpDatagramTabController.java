@@ -14,7 +14,6 @@ import java.util.ResourceBundle;
  * @author: 黄辉鸿
  * @create: 2020-08-04 19:48
  **/
-@FXMLController
 public class UdpDatagramTabController implements Initializable {
     public TextField ipTxt;
     public TextField sendPortTxt;

@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<Tab text="Untitled Tab" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ut.commclient.controller.center.TcpServerTabController">
+<Tab fx:id="tcpServerTab" onCloseRequest="#beforeClose" text="Untitled Tab" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ut.commclient.controller.center.TcpServerTabController">
     <content>
         <VBox spacing="10">
             <children>
@@ -13,14 +13,14 @@
                         <Label text="端口" />
                         <TextField fx:id="portTxt" prefWidth="50.0" text="8998" />
                         <Button fx:id="beginBtn" mnemonicParsing="false" onAction="#listenBegin" text="开始监听" />
-                        <Button fx:id="stopBtn" disable="true" mnemonicParsing="false" text="停止监听" />
-                        <Button fx:id="sendBtn" disable="true" mnemonicParsing="false" text="发送信息" />
+                        <Button fx:id="stopBtn" disable="true" mnemonicParsing="false" onAction="#listenEnd" text="停止监听" />
+                        <Button fx:id="sendBtn" disable="true" mnemonicParsing="false" onAction="#sendMsg" text="发送信息" />
                     </children>
                 </HBox>
                 <HBox alignment="CENTER" spacing="10">
                     <children>
-                        <TextArea fx:id="sendMsgTxt" prefHeight="100.0" />
-                        <ListView fx:id="clientListView" prefHeight="150.0" />
+                        <TextArea fx:id="sendMsgTxt" prefHeight="150.0" />
+                        <ListView fx:id="clientListView" prefHeight="150.0" prefWidth="400.0" />
                     </children>
                 </HBox>
                 <TextArea fx:id="recTxt" editable="false" VBox.vgrow="ALWAYS" />

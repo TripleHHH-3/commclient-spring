@@ -27,7 +27,11 @@
         </MenuBar>
     </top>
     <left>
-        <TreeView fx:id="treeView" prefWidth="150.0" BorderPane.alignment="CENTER"/>
+        <TreeView fx:id="treeView" prefWidth="150.0" BorderPane.alignment="CENTER">
+            <contextMenu>
+                <fx:include source="left/TreeViewMenu.fxml"/>
+            </contextMenu>
+        </TreeView>
     </left>
     <center>
         <StackPane BorderPane.alignment="CENTER">

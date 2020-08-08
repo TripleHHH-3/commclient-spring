@@ -23,7 +23,7 @@ public class TabPaneHasList<T> extends TabPane {
     }
 
     //todo
-    public void removeTab(Tab tab) {
-
+    public void removeTab(T controller) {
+        tabControllerList.remove(controller);
     }
 }

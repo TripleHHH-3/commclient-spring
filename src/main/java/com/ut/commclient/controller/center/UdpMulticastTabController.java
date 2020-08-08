@@ -14,7 +14,6 @@ import java.util.ResourceBundle;
  * @author: 黄辉鸿
  * @create: 2020-08-04 19:50
  **/
-@FXMLController
 public class UdpMulticastTabController implements Initializable {
     public TextField bindIpGroupTxt;
     public TextField bindPortTxt;
