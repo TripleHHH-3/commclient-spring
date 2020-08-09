@@ -7,9 +7,10 @@ javafx:
     resizable:
     sytle:
 
-rec-path: src\main\resources\rec\rec.txt
-start-path: src\main\resources\start\start.yml
-task-path: src\main\resources\task\task.yml
+path:
+  rec: src\main\resources\rec\rec.txt
+  start: src\main\resources\start\start.yml
+  task: src\main\resources\task\task.yml
 
 heartbeat:
   time-interval: 5000

@@ -6,6 +6,11 @@ import com.ut.commclient.model.RecModel;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 
+/**
+ * @description:
+ * @author: 黄辉鸿
+ * @create: 2020-08-09 19:29
+ **/
 public abstract class FileUtil {
     public static void write(String path, RecModel recModel) {
         try {

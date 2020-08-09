@@ -14,17 +14,17 @@ public class Config {
     private static String startPath;
     private static String taskPath;
 
-    @Value("${rec-path}")
+    @Value("${path.rec}")
     private void setRecPath(String recPath) {
         Config.recPath = recPath;
     }
 
-    @Value("${start-path}")
+    @Value("${path.start}")
     private void setStartPath(String startPath) {
         Config.startPath = startPath;
     }
 
-    @Value("${task-path}")
+    @Value("${path.task}")
     private void setTaskPath(String taskPath) {
         Config.taskPath = taskPath;
     }

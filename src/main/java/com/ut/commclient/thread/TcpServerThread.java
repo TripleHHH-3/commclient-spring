@@ -17,8 +17,10 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
 /**
- * 该类为多线程类，用于服务端
- */
+ * @description:
+ * @author: 黄辉鸿
+ * @create: 2020-08-09 19:29
+ **/
 public class TcpServerThread implements Runnable {
 
     private final ServerSocket serverSocket;

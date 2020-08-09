@@ -18,7 +18,7 @@ public class CommClientApplication extends AbstractJavaFxApplicationSupport {
     public static void main(String[] args) {
         launch(CommClientApplication.class, MainView.class, new SplashScreen() {
             public boolean visible() {
-                return false;
+                return true;
             }
         }, args);
     }

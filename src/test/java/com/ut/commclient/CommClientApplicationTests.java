@@ -3,7 +3,7 @@ package com.ut.commclient;
 import de.felixroske.jfxsupport.AbstractFxmlView;
 import de.roskenet.jfxsupport.test.GuiTest;
 import javafx.application.Platform;
-import org.junit.After;
+import org.junit.jupiter.api.AfterAll;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.PostConstruct;
@@ -29,7 +29,7 @@ public abstract class CommClientApplicationTests<T extends AbstractFxmlView> ext
     }
 
 
-    @After
+    @AfterAll
     public final void resetValues() {
         // You are responsible for cleaning up your Beans!
         Platform.runLater(() -> {

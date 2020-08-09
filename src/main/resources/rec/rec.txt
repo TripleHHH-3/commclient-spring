@@ -42,3 +42,7 @@
 {"fromType":"Server","formIp":"127.0.0.1","formPort":8997,"toType":"client","toIp":"127.0.0.1","toPort":54303,"content":"echo:clientecho:server"}
 {"fromType":"tcpClient","formIp":"127.0.0.1","formPort":60997,"toType":"tcpServer","toIp":"0.0.0.0","toPort":8998,"content":"韦灼仪"}
 {"fromType":"tcpClient","formIp":"127.0.0.1","formPort":61064,"toType":"tcpServer","toIp":"0.0.0.0","toPort":8998,"content":"韦灼仪222222"}
+{"fromType":"tcpClient","formIp":"127.0.0.1","formPort":51656,"toType":"tcpServer","toIp":"0.0.0.0","toPort":8999,"content":"33333"}
+{"fromType":"tcpClient","formIp":"127.0.0.1","formPort":51655,"toType":"tcpServer","toIp":"0.0.0.0","toPort":8998,"content":"22222"}
+{"fromType":"Server","formIp":"127.0.0.1","formPort":8999,"toType":"client","toIp":"127.0.0.1","toPort":57963,"content":"echo:clientecho:clientecho:client"}
+{"fromType":"Server","formIp":"127.0.0.1","formPort":8998,"toType":"client","toIp":"127.0.0.1","toPort":57962,"content":"echo:clientecho:clientecho:client"}

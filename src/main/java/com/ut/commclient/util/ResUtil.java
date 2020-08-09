@@ -6,6 +6,11 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * @description:
+ * @author: 黄辉鸿
+ * @create: 2020-08-09 19:29
+ **/
 public abstract class ResUtil {
     public static void close(BufferedReader reader, BufferedWriter writer, ServerSocket serverSocket, Socket socket) {
         if (serverSocket != null) {
