@@ -3,6 +3,7 @@ package com.ut.commclient.controller.center;
 import com.ut.commclient.common.BufferedWriterLock;
 import com.ut.commclient.config.Config;
 import com.ut.commclient.config.HeartBeat;
+import com.ut.commclient.contant.KeyName;
 import com.ut.commclient.model.RecModel;
 import com.ut.commclient.util.FileUtil;
 import com.ut.commclient.util.ResUtil;
@@ -25,6 +26,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -193,5 +195,6 @@ public class TcpClientTabController implements Initializable {
     public void closeBefore(Event event) {
         isStop = true;
         ResUtil.closeWriterAndReaderAndSocket(reader, writer, socket);
+        ((List) tcpClientTab.getTabPane().getProperties().get(KeyName.CONTROLLER_LIST)).remove(this);
     }
 }

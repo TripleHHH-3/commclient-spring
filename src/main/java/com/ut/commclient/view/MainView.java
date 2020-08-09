@@ -4,6 +4,7 @@ import com.ut.commclient.contant.KeyName;
 import com.ut.commclient.model.TreeViewModel;
 import de.felixroske.jfxsupport.AbstractFxmlView;
 import de.felixroske.jfxsupport.FXMLView;
+import de.felixroske.jfxsupport.GUIState;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -95,6 +96,9 @@ public class MainView extends AbstractFxmlView {
                 children.get(children.size() - 2).setVisible(false);
             }
         });
+
+        //关闭程序时结束所有后台线程
+        GUIState.getStage().setOnCloseRequest(event -> System.exit(0));
     }
 
     private TabPane initTabPane(String id, String path) throws IOException {

@@ -54,7 +54,7 @@ public class TcpServerHeartBeatTask {
                                 if ((System.currentTimeMillis() - client.getLastRecTime() > HeartBeat.getTimeOut())) {
                                     downClients.add(client);
                                 } else {
-                                    //给为超时的客户端发送心跳
+                                    //给未超时的客户端发送心跳
                                     try {
                                         client.getWriter().writeFlush(HeartBeat.getEchoClient());
                                     } catch (IOException e) {
@@ -74,3 +74,16 @@ public class TcpServerHeartBeatTask {
         }
     }
 }
+//                        clientList.removeIf(client -> {
+//                            if ((System.currentTimeMillis() - client.getLastRecTime() > HeartBeat.getTimeOut())) {
+//                                return true;
+//                            } else {
+//                                try {
+//                                    client.getWriter().writeFlush(HeartBeat.getEchoClient());
+//                                    return false;
+//                                } catch (IOException e) {
+//                                    e.printStackTrace();
+//                                    return true;
+//                                }
+//                            }
+//                        });

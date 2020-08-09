@@ -21,7 +21,6 @@ public class CommClientApplication extends AbstractJavaFxApplicationSupport {
                 return false;
             }
         }, args);
-        
     }
 
 }

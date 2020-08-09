@@ -1,25 +1,46 @@
 package com.ut.commclient;
 
-import org.junit.jupiter.api.Test;
+import de.felixroske.jfxsupport.AbstractFxmlView;
+import de.roskenet.jfxsupport.test.GuiTest;
+import javafx.application.Platform;
+import org.junit.After;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import javax.annotation.PostConstruct;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 @SpringBootTest
-class CommClientApplicationTests {
+public abstract class CommClientApplicationTests<T extends AbstractFxmlView> extends GuiTest {
+    protected Class clazz;
 
-    @Test
-    void contextLoads() throws IOException {
-        ArrayList<Integer> integers = new ArrayList<>();
-        for (int i = 0; i < 1000; i++) {
-            integers.add(i);
+    public CommClientApplicationTests() {
+        Class c = this.getClass();
+        Type t = c.getGenericSuperclass();
+        if (t instanceof ParameterizedType) {
+            Type[] p = ((ParameterizedType) t).getActualTypeArguments();
+            this.clazz = (Class<T>) p[0];
         }
-        integers.forEach(integer -> {
-            if (integer > 200 && (integer % 5 == 5)) {
-                integers.remove(integer);
-            }
+    }
+
+    @PostConstruct
+    public final void init() throws Exception {
+        init(this.clazz);
+    }
+
+
+    @After
+    public final void resetValues() {
+        // You are responsible for cleaning up your Beans!
+        Platform.runLater(() -> {
+            /*
+                maybe like this
+                TextField helloLabel = (TextField) find("#nameField");
+                helloLabel.setText("");
+            */
+            reset();
         });
     }
 
+    public abstract void reset();
 }
