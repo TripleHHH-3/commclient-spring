@@ -17,6 +17,10 @@ heartbeat:
   time-out: 15000
   time-retry: 1000
 
+task:
+  time-interval: 5000
+  time-retry: 5000
+
 #spring 默认单线程执行定时任务，必须配置线程池，否则会踩坑
 spring:
   task:

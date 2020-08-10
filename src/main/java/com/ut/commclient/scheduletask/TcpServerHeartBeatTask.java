@@ -1,7 +1,7 @@
 package com.ut.commclient.scheduletask;
 
 import com.ut.commclient.config.HeartBeat;
-import com.ut.commclient.contant.KeyName;
+import com.ut.commclient.contant.PropertyKey;
 import com.ut.commclient.controller.MainViewController;
 import com.ut.commclient.controller.center.TcpServerTabController;
 import com.ut.commclient.model.TcpClientModel;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @description:
+ * @description: tcp服务端的心跳任务
  * @author: 黄辉鸿
  * @create: 2020-08-07 19:29
  **/
@@ -35,7 +35,7 @@ public class TcpServerHeartBeatTask {
     //此任务需两层嵌套遍历，分别是每一个tab和tab里面的listView
     @Scheduled(initialDelayString = "${heartbeat.time-interval}", fixedDelayString = "${heartbeat.time-interval}")
     public void task() {
-        List<TcpServerTabController> tabControllerList = (List<TcpServerTabController>) mainViewController.getTcpServerTabPane().getProperties().get(KeyName.CONTROLLER_LIST);
+        List<TcpServerTabController> tabControllerList = (List<TcpServerTabController>) mainViewController.getTcpServerTabPane().getProperties().get(PropertyKey.CONTROLLER_LIST);
 
         if (ListUtil.gtZero(tabControllerList)) {
             synchronized (tabControllerList) {
@@ -74,6 +74,7 @@ public class TcpServerHeartBeatTask {
         }
     }
 }
+//                        在非UI线程中执行移除操作报异常
 //                        clientList.removeIf(client -> {
 //                            if ((System.currentTimeMillis() - client.getLastRecTime() > HeartBeat.getTimeOut())) {
 //                                return true;

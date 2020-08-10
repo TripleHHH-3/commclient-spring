@@ -3,7 +3,7 @@ package com.ut.commclient.controller.center;
 import com.ut.commclient.common.BufferedWriterLock;
 import com.ut.commclient.config.Config;
 import com.ut.commclient.config.HeartBeat;
-import com.ut.commclient.contant.KeyName;
+import com.ut.commclient.contant.PropertyKey;
 import com.ut.commclient.model.RecModel;
 import com.ut.commclient.util.FileUtil;
 import com.ut.commclient.util.ResUtil;
@@ -74,6 +74,9 @@ public class TcpClientTabController implements Initializable {
         beginBtn.setDisable(true);
         stopBtn.setDisable(false);
         isStop = false;
+
+        //设置tab标题
+        tcpClientTab.setText(ip + ":" + portTxt.getText());
 
         //开启线程,连接服务端
         new Thread(this::connectToServer).start();
@@ -195,6 +198,6 @@ public class TcpClientTabController implements Initializable {
     public void closeBefore(Event event) {
         isStop = true;
         ResUtil.closeWriterAndReaderAndSocket(reader, writer, socket);
-        ((List) tcpClientTab.getTabPane().getProperties().get(KeyName.CONTROLLER_LIST)).remove(this);
+        ((List) tcpClientTab.getTabPane().getProperties().get(PropertyKey.CONTROLLER_LIST)).remove(this);
     }
 }

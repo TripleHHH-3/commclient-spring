@@ -25,7 +25,7 @@
                         <Button fx:id="stopListenBtn" disable="true" mnemonicParsing="false" onAction="#listenEnd" text="停止监听" />
                     </children>
                 </HBox>
-                <TextArea fx:id="recMsgTxt" editable="false" />
+                <TextArea fx:id="recMsgTxt" editable="false" VBox.vgrow="ALWAYS" />
             </children>
             <padding>
                 <Insets bottom="7.5" left="10.0" right="10.0" top="10.0" />

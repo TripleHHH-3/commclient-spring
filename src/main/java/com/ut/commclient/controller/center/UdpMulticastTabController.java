@@ -105,6 +105,9 @@ public class UdpMulticastTabController implements Initializable {
         int port = Integer.parseInt(listenPortTxt.getText());
         String ip = listenIpGroupTxt.getText();
 
+        //设置标题
+        udpMulticastTab.setText(ip + ":" + port);
+
         new Thread(() -> {
             try {
                 InetAddress ipGroup = InetAddress.getByName(ip); // 指定接收地址

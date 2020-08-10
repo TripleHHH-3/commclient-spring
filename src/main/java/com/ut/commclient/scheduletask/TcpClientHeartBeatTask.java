@@ -1,7 +1,7 @@
 package com.ut.commclient.scheduletask;
 
 import com.ut.commclient.config.HeartBeat;
-import com.ut.commclient.contant.KeyName;
+import com.ut.commclient.contant.PropertyKey;
 import com.ut.commclient.controller.MainViewController;
 import com.ut.commclient.controller.center.TcpClientTabController;
 import com.ut.commclient.util.ListUtil;
@@ -17,7 +17,7 @@ import java.net.Socket;
 import java.util.List;
 
 /**
- * @description:
+ * @description: tcp客户端的心跳任务
  * @author: 黄辉鸿
  * @create: 2020-08-07 14:32
  **/
@@ -30,7 +30,7 @@ public class TcpClientHeartBeatTask {
     @Async
     @Scheduled(initialDelayString = "${heartbeat.time-interval}", fixedDelayString = "${heartbeat.time-interval}")
     public void task() {
-        List<TcpClientTabController> tabControllerList = (List<TcpClientTabController>) mainViewController.getTcpClientTabPane().getProperties().get(KeyName.CONTROLLER_LIST);
+        List<TcpClientTabController> tabControllerList = (List<TcpClientTabController>) mainViewController.getTcpClientTabPane().getProperties().get(PropertyKey.CONTROLLER_LIST);
         //当列表大于0时
         if (ListUtil.gtZero(tabControllerList)) {
 

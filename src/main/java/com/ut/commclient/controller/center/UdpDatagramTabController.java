@@ -81,10 +81,10 @@ public class UdpDatagramTabController implements Initializable {
 
     public void sendMsg(ActionEvent actionEvent) {
         String ip = ipTxt.getText();
-        byte[] bytes = sendMsgTxt.getText().getBytes();
         int port = Integer.parseInt(sendPortTxt.getText());
-        //2.创建数据包对象
+        byte[] bytes = sendMsgTxt.getText().getBytes();
 
+        //2.创建数据包对象
         InetAddress inetAddress;
         try {
             inetAddress = InetAddress.getByName(ip);
@@ -105,6 +105,9 @@ public class UdpDatagramTabController implements Initializable {
 
     public void listenBegin(ActionEvent actionEvent) {
         int port = Integer.parseInt(recPortTxt.getText());
+
+        //设置标题
+        udpDatagramTab.setText(recPortTxt.getText());
 
         listenBtn.setDisable(true);
         //开启绑定线程
@@ -134,9 +137,7 @@ public class UdpDatagramTabController implements Initializable {
 
             } catch (Exception e) {
                 e.printStackTrace();
-                if (recSocket != null) {
-                    recSocket.close();
-                }
+                if (recSocket != null) recSocket.close();
                 listenBtn.setDisable(false);
                 log.error(e);
             }
@@ -147,6 +148,6 @@ public class UdpDatagramTabController implements Initializable {
     public void listenEnd(ActionEvent actionEvent) {
         listenBtn.setDisable(false);
         stopListenBtn.setDisable(true);
-        recSocket.close();
+        if (recSocket != null) recSocket.close();
     }
 }

@@ -1,6 +1,6 @@
 package com.ut.commclient.controller.left;
 
-import com.ut.commclient.contant.KeyName;
+import com.ut.commclient.contant.PropertyKey;
 import com.ut.commclient.controller.MainViewController;
 import com.ut.commclient.model.TreeViewModel;
 import de.felixroske.jfxsupport.FXMLController;
@@ -28,12 +28,12 @@ public class TreeViewMenuController {
     public void addTab(ActionEvent actionEvent) {
         TreeItem<TreeViewModel> selectedItem = mainViewController.getTreeView().getSelectionModel().getSelectedItem();
         TabPane tabPane = selectedItem.getValue().getStackNode();
-        URL url = (URL) tabPane.getProperties().get(KeyName.TAB_URL);
+        URL url = (URL) tabPane.getProperties().get(PropertyKey.TAB_URL);
         FXMLLoader tabLoader = new FXMLLoader(url);
         //给tabPane添加tab
         tabPane.getTabs().add(tabLoader.load());
         //同时给controllerList添加
-        List controllerList = (List) tabPane.getProperties().get(KeyName.CONTROLLER_LIST);
+        List controllerList = (List) tabPane.getProperties().get(PropertyKey.CONTROLLER_LIST);
         controllerList.add(tabLoader.getController());
     }
 }

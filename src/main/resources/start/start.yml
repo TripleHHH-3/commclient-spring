@@ -1,8 +1,8 @@
-tcpClient:
-  - ip: 127.0.0.1
-    port: 8998
-  - ip: 127.0.0.1
-    port: 8999
+#tcpClient:
+#  - ip: 127.0.0.1
+#    port: 8998
+#  - ip: 127.0.0.1
+#    port: 8999
 
 tcpServer:
   - ip: 127.0.0.1
@@ -10,20 +10,20 @@ tcpServer:
   - ip: 127.0.0.1
     port: 8999
 
-udpDatagram:
-  - sendIp: 127.0.0.1
-    sendPort: 8080
-    recPort: 8080
-  - sendIp: 127.0.0.1
-    sendPort: 8081
-    recPort: 8081
-
-udpMulticast:
-  - sendIp: 224.255.10.0
-    sendPort: 9991
-    recIp: 224.255.10.0
-    recPort: 9991
-  - sendIp: 224.255.10.0
-    sendPort: 9999
-    recIp: 224.255.10.0
-    recPort: 9999
+#udpDatagram:
+#  - sendIp: 127.0.0.1
+#    sendPort: 8080
+#    recPort: 8080
+#  - sendIp: 127.0.0.1
+#    sendPort: 8081
+#    recPort: 8081
+#
+#udpMulticast:
+#  - sendIp: 224.255.10.0
+#    sendPort: 9991
+#    recIp: 224.255.10.0
+#    recPort: 9991
+#  - sendIp: 224.255.10.0
+#    sendPort: 9999
+#    recIp: 224.255.10.0
+#    recPort: 9999

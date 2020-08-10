@@ -1,7 +1,7 @@
 package com.ut.commclient.controller.center;
 
 import com.ut.commclient.common.BufferedWriterLock;
-import com.ut.commclient.contant.KeyName;
+import com.ut.commclient.contant.PropertyKey;
 import com.ut.commclient.model.TcpClientModel;
 import com.ut.commclient.thread.TcpServerThread;
 import com.ut.commclient.util.ResUtil;
@@ -74,6 +74,9 @@ public class TcpServerTabController implements Initializable {
         int port = Integer.parseInt(portTxt.getText());
         beginBtn.setDisable(true);
         sendBtn.setDisable(false);
+
+        //设置tab标题
+        tcpServerTab.setText(portTxt.getText());
 
         //开启监听线程
         new Thread(() -> {
@@ -153,6 +156,6 @@ public class TcpServerTabController implements Initializable {
     public void beforeClose(Event event) {
         //关闭tab之前，释放套接口资源，同时在tabPane移除对应的controller
         listenEnd(null);
-        ((List) tcpServerTab.getTabPane().getProperties().get(KeyName.CONTROLLER_LIST)).remove(this);
+        ((List) tcpServerTab.getTabPane().getProperties().get(PropertyKey.CONTROLLER_LIST)).remove(this);
     }
 }

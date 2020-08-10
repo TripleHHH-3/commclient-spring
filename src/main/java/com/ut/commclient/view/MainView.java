@@ -1,6 +1,6 @@
 package com.ut.commclient.view;
 
-import com.ut.commclient.contant.KeyName;
+import com.ut.commclient.contant.PropertyKey;
 import com.ut.commclient.model.TreeViewModel;
 import de.felixroske.jfxsupport.AbstractFxmlView;
 import de.felixroske.jfxsupport.FXMLView;
@@ -112,9 +112,9 @@ public class MainView extends AbstractFxmlView {
         tabPane.getTabs().add(tabLoader.load());
         //把tab对应的controller放到tabPane的map
         Object controller = tabLoader.getController();
-        tabPane.getProperties().put(KeyName.CONTROLLER_LIST, Collections.synchronizedList(new ArrayList<>(Arrays.asList(controller))));
+        tabPane.getProperties().put(PropertyKey.CONTROLLER_LIST, Collections.synchronizedList(new ArrayList<>(Arrays.asList(controller))));
         //把tab的URL存到tabPane的map，方便listView的菜单使用
-        tabPane.getProperties().put(KeyName.TAB_URL, tabLoader.getLocation());
+        tabPane.getProperties().put(PropertyKey.TAB_URL, tabLoader.getLocation());
 
         return tabPane;
     }
