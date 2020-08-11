@@ -67,28 +67,48 @@ public class SendTask {
         tcpServerTask();
 
         //执行udpDatagramTask任务
-//        List<TaskModel.Target> udpDatagramTask = task.getUdpDatagramTask();
-//        if (ListUtil.gtZero(udpDatagramTask)) {
-//            List<UdpDatagramTabController> controllerList = (List) mainViewController.getUdpDatagramTabPane().getProperties().get(PropertyKey.CONTROLLER_LIST);
-//            if (ListUtil.gtZero(controllerList)) {
-//
-//            }
-//        }
-//
-//
-//        List<TaskModel> udpDatagramTask2 = task.getUdpDatagramTask();
-//        if (ListUtil.GtZero(udpDatagramTask)) {
-//            UdpDatagramTab udpDatagramTab = new UdpDatagramTab();
-//            udpDatagramTab.setText("New Tab");
-//            Platform.runLater(() -> udpDatagramTabPane.getTabs().add(udpDatagramTab));
-//            udpDatagramTask.forEach(taskModel -> {
-//                udpDatagramTab.getIpTxt().setText(taskModel.getIp());
-//                udpDatagramTab.getSendPortTxt().setText(taskModel.getPort().toString());
-//                udpDatagramTab.getSendMsgTxt().setText(taskModel.getContent());
-//                udpDatagramTab.getBindBtn().fire();
-//                udpDatagramTab.getSendBtn().fire();
-//            });
-//        }
+        udpDatagramTask();
+    }
+
+    private void udpDatagramTask() {
+        List<TaskModel.Target> udpDatagramTask = task.getUdpDatagramTask();
+        if (ListUtil.gtZero(udpDatagramTask)) {
+            TabPane udpDatagramTabPane = mainViewController.getUdpDatagramTabPane();
+            List<UdpDatagramTabController> controllerList = (List) udpDatagramTabPane.getProperties().get(PropertyKey.CONTROLLER_LIST);
+            URL url = (URL) udpDatagramTabPane.getProperties().get(PropertyKey.TAB_URL);
+            out:
+            for (TaskModel.Target target : udpDatagramTask) {
+                if (ListUtil.gtZero(controllerList)) {
+                    synchronized (controllerList) {
+                        for (UdpDatagramTabController controller : controllerList) {
+                            if (target.getIp().equals(controller.getIpTxt().getText()) &&
+                                    target.getPort().equals(controller.getSendPortTxt().getText()) &&
+                                    controller.getBindBtn().isDisable()) {
+                                controller.getSendMsgTxt().setText(target.getContent());
+                                controller.getSendBtn().fire();
+                                continue out;
+                            }
+                        }
+                    }
+                }
+
+                FXMLLoader loader = new FXMLLoader(url);
+                Tab tab;
+                try {
+                    tab = loader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    continue;
+                }
+                udpDatagramTabPane.getTabs().add(tab);
+                UdpDatagramTabController controller = loader.getController();
+                controllerList.add(controller);
+                controller.getIpTxt().setText(target.getIp());
+                controller.getSendPortTxt().setText(target.getPort().toString());
+                controller.getSendMsgTxt().setText(target.getContent());
+                controller.getSendBtn().fire();
+            }
+        }
     }
 
     private void tcpServerTask() {
@@ -98,26 +118,28 @@ public class SendTask {
             List<TcpServerTabController> controllerList = (List) mainViewController.getTcpServerTabPane().getProperties().get(PropertyKey.CONTROLLER_LIST);
             //服务器列表是否为空
             if (ListUtil.gtZero(controllerList)) {
-                //遍历任务
-                tcpServerTask.forEach(taskModel -> {
-                    //遍历服务器
-                    controllerList.forEach(controller -> {
-                        //遍历与服务器正在连接的客户端
-                        controller.getClientListView().getItems().forEach(client -> {
-                            //判断IP、端口是否相等，判断套接口是否连接
-                            if (client.getIp().equals(taskModel.getIp()) &&
-                                    client.getPort().equals(taskModel.getPort()) &&
-                                    client.getSocket().isConnected()) {
-                                //发送消息
-                                try {
-                                    client.getWriter().writeFlush(taskModel.getContent());
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+                synchronized (controllerList) {
+                    //遍历任务
+                    tcpServerTask.forEach(taskModel -> {
+                        //遍历服务器
+                        controllerList.forEach(controller -> {
+                            //遍历与服务器正在连接的客户端
+                            controller.getClientListView().getItems().forEach(client -> {
+                                //判断IP、端口是否相等，判断套接口是否连接
+                                if (client.getIp().equals(taskModel.getIp()) &&
+                                        client.getPort().equals(taskModel.getPort()) &&
+                                        client.getSocket().isConnected()) {
+                                    //发送消息
+                                    try {
+                                        client.getWriter().writeFlush(taskModel.getContent());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                            }
+                            });
                         });
                     });
-                });
+                }
             }
         }
     }
@@ -128,9 +150,9 @@ public class SendTask {
 
             TabPane tcpClientTabPane = mainViewController.getTcpClientTabPane();
             List<TcpClientTabController> controllerList = (List) tcpClientTabPane.getProperties().get(PropertyKey.CONTROLLER_LIST);
+            URL url = (URL) tcpClientTabPane.getProperties().get(PropertyKey.TAB_URL);
 
             if (controllerList != null) {
-                URL url = (URL) tcpClientTabPane.getProperties().get(PropertyKey.TAB_URL);
                 //遍历tcpClient任务
                 out:
                 for (TaskModel.Target target : tcpClientTask) {

@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<Tab fx:id="udpDatagramTab" text="Untitled Tab" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ut.commclient.controller.center.UdpDatagramTabController">
+<Tab fx:id="udpDatagramTab" onCloseRequest="#closeBefore" text="Untitled Tab" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ut.commclient.controller.center.UdpDatagramTabController">
     <content>
         <VBox spacing="10">
             <children>

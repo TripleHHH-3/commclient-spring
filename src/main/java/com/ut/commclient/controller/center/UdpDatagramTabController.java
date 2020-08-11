@@ -1,6 +1,8 @@
 package com.ut.commclient.controller.center;
 
+import com.ut.commclient.contant.PropertyKey;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -15,6 +17,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -149,5 +152,15 @@ public class UdpDatagramTabController implements Initializable {
         listenBtn.setDisable(false);
         stopListenBtn.setDisable(true);
         if (recSocket != null) recSocket.close();
+    }
+
+    public void closeBefore(Event event) {
+        ((List) udpDatagramTab.getProperties().get(PropertyKey.CONTROLLER_LIST)).remove(this);
+        if (recSocket != null) {
+            recSocket.close();
+        }
+        if (sendSocket != null) {
+            sendSocket.close();
+        }
     }
 }

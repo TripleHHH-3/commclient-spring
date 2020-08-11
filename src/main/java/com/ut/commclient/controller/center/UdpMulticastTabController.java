@@ -1,6 +1,8 @@
 package com.ut.commclient.controller.center;
 
+import com.ut.commclient.contant.PropertyKey;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -14,6 +16,7 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -138,5 +141,15 @@ public class UdpMulticastTabController implements Initializable {
         listenBeginBtn.setDisable(false);
         listenStopBtn.setDisable(true);
         if (recSocket != null) recSocket.close();
+    }
+
+    public void closeBefore(Event event) {
+        ((List) udpMulticastTab.getProperties().get(PropertyKey.CONTROLLER_LIST)).remove(this);
+        if (sendSocket != null) {
+            sendSocket.close();
+        }
+        if (recSocket != null) {
+            recSocket.close();
+        }
     }
 }

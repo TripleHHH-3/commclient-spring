@@ -155,7 +155,7 @@ public class TcpServerTabController implements Initializable {
 
     public void beforeClose(Event event) {
         //关闭tab之前，释放套接口资源，同时在tabPane移除对应的controller
-        listenEnd(null);
         ((List) tcpServerTab.getTabPane().getProperties().get(PropertyKey.CONTROLLER_LIST)).remove(this);
+        listenEnd(null);
     }
 }

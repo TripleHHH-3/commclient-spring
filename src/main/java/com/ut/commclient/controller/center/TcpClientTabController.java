@@ -196,8 +196,8 @@ public class TcpClientTabController implements Initializable {
     }
 
     public void closeBefore(Event event) {
+        ((List) tcpClientTab.getTabPane().getProperties().get(PropertyKey.CONTROLLER_LIST)).remove(this);
         isStop = true;
         ResUtil.closeWriterAndReaderAndSocket(reader, writer, socket);
-        ((List) tcpClientTab.getTabPane().getProperties().get(PropertyKey.CONTROLLER_LIST)).remove(this);
     }
 }
