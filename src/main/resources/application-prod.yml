@@ -1,12 +1,35 @@
 javafx:
   title: Communication Client
-#  appicons:
+  #  appicons:
   stage:
     width: 650
     height:
     resizable:
     sytle:
 
-recPath: .\rec\rec.txt
-startPath: .\start\start.yml
-taskPath: .\task\task.yml
+path:
+  rec: .\rec\rec.txt
+  start: .\start\start.yml
+  task: .\task\task.yml
+
+heartbeat:
+  #间隔时间
+  time-interval: 5000
+  #超时时间
+  time-out: 15000
+  #连接失败后重连时间
+  time-retry: 1000
+
+task:
+  time-interval: 5000
+  time-retry: 5000
+
+#spring 默认单线程执行定时任务，必须配置线程池，否则会踩坑
+spring:
+  task:
+    scheduling:
+      pool:
+        size: 5
+
+logging:
+  config: classpath:log4j2.yml

@@ -3,6 +3,9 @@ package com.ut.commclient.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.io.IOException;
+
 /**
  * @description:
  * @author: 黄辉鸿
@@ -16,16 +19,19 @@ public class Config {
 
     @Value("${path.rec}")
     private void setRecPath(String recPath) {
+        createFile(recPath);
         Config.recPath = recPath;
     }
 
     @Value("${path.start}")
     private void setStartPath(String startPath) {
+        createFile(startPath);
         Config.startPath = startPath;
     }
 
     @Value("${path.task}")
     private void setTaskPath(String taskPath) {
+        createFile(taskPath);
         Config.taskPath = taskPath;
     }
 
@@ -39,5 +45,20 @@ public class Config {
 
     public static String getTaskPath() {
         return taskPath;
+    }
+
+    private void createFile(String path) {
+        File file = new File(path);
+        File parentFile = file.getParentFile();
+        if (!parentFile.exists()) {
+            parentFile.mkdirs();
+        }
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

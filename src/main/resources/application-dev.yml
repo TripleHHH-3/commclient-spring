@@ -13,8 +13,11 @@ path:
   task: src\main\resources\task\task.yml
 
 heartbeat:
+  #间隔时间
   time-interval: 5000
+  #超时时间
   time-out: 15000
+  #连接失败后重连时间
   time-retry: 1000
 
 task:
@@ -26,4 +29,7 @@ spring:
   task:
     scheduling:
       pool:
-        size: 10
+        size: 5
+
+logging:
+  config: classpath:log4j2.yml

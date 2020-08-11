@@ -11,13 +11,13 @@ import java.util.List;
  **/
 @Data
 public class TaskModel {
-    private List<target> tcpClientTask;
-    private List<target> tcpServerTask;
-    private List<target> udpDatagramTask;
-    private List<target> udpMulticastTask;
+    private List<Target> tcpClientTask;
+    private List<Target> tcpServerTask;
+    private List<Target> udpDatagramTask;
+    private List<Target> udpMulticastTask;
 
     @Data
-    public static class target {
+    public static class Target {
         private String ip;
         private Integer port;
         private String content;
