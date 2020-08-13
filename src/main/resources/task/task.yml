@@ -1,10 +1,10 @@
-#tcpClientTask:
-#  - ip: 127.0.0.1
-#    port: 8998
-#    content: 1111111111111
-#  - ip: 127.0.0.1
-#    port: 8999
-#    content: 222222222222
+tcpClientTask:
+  - ip: 127.0.0.1
+    port: 8998
+    content: 1111111111111
+  - ip: 127.0.0.1
+    port: 8999
+    content: 222222222222
 
 #tcpServerTask:
 #  - ip: 127.0.0.1

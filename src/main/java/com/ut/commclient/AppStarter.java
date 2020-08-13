@@ -5,7 +5,7 @@ package com.ut.commclient;
  * @author: 黄辉鸿
  * @create: 2020-08-11 17:08
  **/
-public class Starter {
+public class AppStarter {
     public static void main(String[] args) {
         CommClientApplication.main(args);
     }

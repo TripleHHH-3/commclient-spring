@@ -21,7 +21,9 @@ heartbeat:
   time-retry: 1000
 
 task:
+  #任务执行间隔时间
   time-interval: 5000
+  #tcp连接服务器失败时等待时间
   time-retry: 5000
 
 #spring 默认单线程执行定时任务，必须配置线程池，否则会踩坑

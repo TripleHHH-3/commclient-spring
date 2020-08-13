@@ -1,8 +1,8 @@
-#tcpClient:
-#  - ip: 127.0.0.1
-#    port: 8998
-#  - ip: 127.0.0.1
-#    port: 8999
+tcpClient:
+  - ip: 127.0.0.1
+    port: 8998
+  - ip: 127.0.0.1
+    port: 8999
 
 tcpServer:
   - ip: 127.0.0.1

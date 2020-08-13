@@ -17,6 +17,7 @@ import javafx.scene.control.TabPane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 import java.io.FileReader;
@@ -29,15 +30,16 @@ import java.util.List;
  * @create: 2020-08-09 19:29
  **/
 @Component
+@DependsOn("startModel")
 public class StartTask implements ApplicationRunner {
     @Autowired
     private MainViewController mainViewController;
+    @Autowired
+    private StartModel start;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        //读取配置文件
-        YamlReader reader = new YamlReader(new FileReader(Config.getStartPath()));
-        StartModel start = JSON.parseObject(JSON.toJSONString(reader.read()), StartModel.class);
+        //判断配置信息
         if (start == null) return;
 
         //执行tcpClient初始化

@@ -8,6 +8,7 @@ import com.ut.commclient.controller.MainViewController;
 import com.ut.commclient.controller.center.TcpClientTabController;
 import com.ut.commclient.controller.center.TcpServerTabController;
 import com.ut.commclient.controller.center.UdpDatagramTabController;
+import com.ut.commclient.controller.center.UdpMulticastTabController;
 import com.ut.commclient.model.TaskModel;
 import com.ut.commclient.util.ListUtil;
 import javafx.application.Platform;
@@ -55,6 +56,8 @@ public class SendTask {
             task = JSON.parseObject(JSON.toJSONString(reader.read()), TaskModel.class);
         } catch (Exception e) {
             e.printStackTrace();
+            //todo 完善日志
+            log.error("读取任务文件失败");
             return;
         }
 
@@ -68,30 +71,37 @@ public class SendTask {
 
         //执行udpDatagramTask任务
         udpDatagramTask();
+
+        //执行udpMulticastTask任务
+        udpMulticastTask();
     }
 
-    private void udpDatagramTask() {
-        List<TaskModel.Target> udpDatagramTask = task.getUdpDatagramTask();
-        if (ListUtil.gtZero(udpDatagramTask)) {
-            TabPane udpDatagramTabPane = mainViewController.getUdpDatagramTabPane();
-            List<UdpDatagramTabController> controllerList = (List) udpDatagramTabPane.getProperties().get(PropertyKey.CONTROLLER_LIST);
-            URL url = (URL) udpDatagramTabPane.getProperties().get(PropertyKey.TAB_URL);
+    private void udpMulticastTask() {
+        List<TaskModel.Target> udpMulticastTask = task.getUdpMulticastTask();
+        if (ListUtil.gtZero(udpMulticastTask)) {
+
+            TabPane udpMulticastTabPane = mainViewController.getUdpMulticastTabPane();
+            List<UdpMulticastTabController> controllerList = (List) udpMulticastTabPane.getProperties().get(PropertyKey.CONTROLLER_LIST);
+            URL url = (URL) udpMulticastTabPane.getProperties().get(PropertyKey.TAB_URL);
+            //遍历任务
             out:
-            for (TaskModel.Target target : udpDatagramTask) {
+            for (TaskModel.Target target : udpMulticastTask) {
+
                 if (ListUtil.gtZero(controllerList)) {
                     synchronized (controllerList) {
-                        for (UdpDatagramTabController controller : controllerList) {
-                            if (target.getIp().equals(controller.getIpTxt().getText()) &&
-                                    target.getPort().equals(controller.getSendPortTxt().getText()) &&
-                                    controller.getBindBtn().isDisable()) {
+                        //遍历tab
+                        for (UdpMulticastTabController controller : controllerList) {
+                            if (controller.getBindIpGroupTxt().getText().equals(target.getIp()) &&
+                                    controller.getBindPortTxt().getText().equals(target.getPort().toString()) &&
+                                    controller.getBindBeginBtn().isDisable()) {
                                 controller.getSendMsgTxt().setText(target.getContent());
                                 controller.getSendBtn().fire();
-                                continue out;
                             }
                         }
                     }
                 }
 
+                //不存在tab则创建
                 FXMLLoader loader = new FXMLLoader(url);
                 Tab tab;
                 try {
@@ -100,9 +110,58 @@ public class SendTask {
                     e.printStackTrace();
                     continue;
                 }
-                udpDatagramTabPane.getTabs().add(tab);
+                Platform.runLater(() -> udpMulticastTabPane.getTabs().add(tab));
+                UdpMulticastTabController controller = loader.getController();
+                controllerList.add(controller);
+                //执行任务
+                controller.getBindIpGroupTxt().setText(target.getIp());
+                controller.getBindPortTxt().setText(target.getPort().toString());
+                controller.getSendMsgTxt().setText(target.getContent());
+                controller.getSendBtn().fire();
+            }
+        }
+    }
+
+    private void udpDatagramTask() {
+        List<TaskModel.Target> udpDatagramTask = task.getUdpDatagramTask();
+        if (ListUtil.gtZero(udpDatagramTask)) {
+
+            TabPane udpDatagramTabPane = mainViewController.getUdpDatagramTabPane();
+            List<UdpDatagramTabController> controllerList = (List) udpDatagramTabPane.getProperties().get(PropertyKey.CONTROLLER_LIST);
+            URL url = (URL) udpDatagramTabPane.getProperties().get(PropertyKey.TAB_URL);
+            //遍历任务
+            out:
+            for (TaskModel.Target target : udpDatagramTask) {
+                //遍历tab
+                if (ListUtil.gtZero(controllerList)) {
+                    synchronized (controllerList) {
+                        for (UdpDatagramTabController controller : controllerList) {
+
+                            if (target.getIp().equals(controller.getIpTxt().getText()) &&
+                                    controller.getSendPortTxt().getText().equals(target.getPort().toString()) &&
+                                    controller.getBindBtn().isDisable()) {
+
+                                controller.getSendMsgTxt().setText(target.getContent());
+                                controller.getSendBtn().fire();
+                                continue out;
+                            }
+                        }
+                    }
+                }
+
+                //无已连接的任务目录，则创建tab
+                FXMLLoader loader = new FXMLLoader(url);
+                Tab tab;
+                try {
+                    tab = loader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    continue;
+                }
+                Platform.runLater(() -> udpDatagramTabPane.getTabs().add(tab));
                 UdpDatagramTabController controller = loader.getController();
                 controllerList.add(controller);
+                //执行任务
                 controller.getIpTxt().setText(target.getIp());
                 controller.getSendPortTxt().setText(target.getPort().toString());
                 controller.getSendMsgTxt().setText(target.getContent());
@@ -134,6 +193,8 @@ public class SendTask {
                                         client.getWriter().writeFlush(taskModel.getContent());
                                     } catch (IOException e) {
                                         e.printStackTrace();
+                                        //todo 完善日志
+                                        log.error("发送失败");
                                     }
                                 }
                             });
@@ -181,8 +242,8 @@ public class SendTask {
                         e.printStackTrace();
                         continue;
                     }
-                    TcpClientTabController controller = loader.getController();
                     Platform.runLater(() -> tcpClientTabPane.getTabs().add(tab));
+                    TcpClientTabController controller = loader.getController();
                     controllerList.add(controller);
 
                     //连接服务器

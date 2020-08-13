@@ -104,7 +104,7 @@ public class TcpClientTabController implements Initializable {
                 recMsgTxt.appendText("连接失败：" + e.getMessage() + "重试次数：" + i + "\n");
                 //日志
                 try {
-                    log.error(InetAddress.getLocalHost().getHostAddress() + "===>" + ip + ":" + port+"======"+e.getMessage());
+                    log.error(InetAddress.getLocalHost().getHostAddress() + "===>" + ip + ":" + port + "======" + e.getMessage());
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -121,7 +121,6 @@ public class TcpClientTabController implements Initializable {
 
         //初始化心跳包时间
         lastEchoTime = System.currentTimeMillis();
-
     }
 
     private void recMsgThread() {
