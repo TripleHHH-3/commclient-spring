@@ -43,7 +43,7 @@ public class Config {
         return startPath;
     }
 
-    public static String getTaskPath() {
+    public static String getTaskDir() {
         return taskPath;
     }
 

@@ -10,7 +10,7 @@ javafx:
 path:
   rec: src\main\resources\rec\rec.txt
   start: src\main\resources\start\start.yml
-  task: src\main\resources\task\task.yml
+  task: src\main\resources\task
 
 heartbeat:
   #间隔时间

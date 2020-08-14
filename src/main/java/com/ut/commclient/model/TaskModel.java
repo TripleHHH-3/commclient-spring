@@ -1,8 +1,7 @@
 package com.ut.commclient.model;
 
+import com.ut.commclient.contant.CommType;
 import lombok.Data;
-
-import java.util.List;
 
 /**
  * @description:
@@ -11,15 +10,8 @@ import java.util.List;
  **/
 @Data
 public class TaskModel {
-    private List<Target> tcpClientTask;
-    private List<Target> tcpServerTask;
-    private List<Target> udpDatagramTask;
-    private List<Target> udpMulticastTask;
-
-    @Data
-    public static class Target {
-        private String ip;
-        private Integer port;
-        private String content;
-    }
+    private CommType target;
+    private String ip;
+    private String port;
+    private String data;
 }

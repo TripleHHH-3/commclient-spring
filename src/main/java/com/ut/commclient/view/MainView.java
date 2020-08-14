@@ -1,5 +1,6 @@
 package com.ut.commclient.view;
 
+import com.ut.commclient.contant.CommType;
 import com.ut.commclient.contant.PropertyKey;
 import com.ut.commclient.model.TreeViewModel;
 import de.felixroske.jfxsupport.AbstractFxmlView;
@@ -46,16 +47,16 @@ public class MainView extends AbstractFxmlView {
 
         //treeView的TCP节点
         TreeItem<TreeViewModel> tcp = new TreeItem<>(new TreeViewModel("TCP", null));
-        TreeItem<TreeViewModel> tcpClient = new TreeItem<>(new TreeViewModel("tcpClient", tcpClientTabPane));
-        TreeItem<TreeViewModel> tcpServer = new TreeItem<>(new TreeViewModel("tcpServer", tcpServerTabPane));
+        TreeItem<TreeViewModel> tcpClient = new TreeItem<>(new TreeViewModel(CommType.TCP_CLIENT.getName(), tcpClientTabPane));
+        TreeItem<TreeViewModel> tcpServer = new TreeItem<>(new TreeViewModel(CommType.TCP_SERVER.getName(), tcpServerTabPane));
         tcp.getChildren().add(tcpClient);
         tcp.getChildren().add(tcpServer);
         tcp.setExpanded(true);
 
         //treeView的UDP节点
         TreeItem<TreeViewModel> udp = new TreeItem<>(new TreeViewModel("UDP", null));
-        TreeItem<TreeViewModel> udpClient = new TreeItem<>(new TreeViewModel("udpDatagram", udpDatagramTabPane));
-        TreeItem<TreeViewModel> udpServer = new TreeItem<>(new TreeViewModel("udpMulticast", udpMulticastTabPane));
+        TreeItem<TreeViewModel> udpClient = new TreeItem<>(new TreeViewModel(CommType.UDP_DATAGRAM.getName(), udpDatagramTabPane));
+        TreeItem<TreeViewModel> udpServer = new TreeItem<>(new TreeViewModel(CommType.UDP_MULTICAST.getName(), udpMulticastTabPane));
         udp.getChildren().add(udpClient);
         udp.getChildren().add(udpServer);
         udp.setExpanded(true);
