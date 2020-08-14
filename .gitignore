@@ -33,6 +33,3 @@ build/
 .vscode/
 
 /log/
-/src/main/resources/rec/
-/src/main/resources/start/
-/src/main/resources/task/

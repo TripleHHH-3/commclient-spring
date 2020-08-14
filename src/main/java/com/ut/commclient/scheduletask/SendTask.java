@@ -46,21 +46,21 @@ public class SendTask {
     @Value("${task.time-retry}")
     private long timeRetry;
 
-    private List<TaskModel> taskModelList = new ArrayList<>();
+    private final List<TaskModel> taskModelList = new ArrayList<>();
 
 
     @Async
     @Scheduled(initialDelayString = "${task.time-interval}", fixedDelayString = "${task.time-interval}")
     public void task() {
-
+        //检查文件夹内是否存在任务文件
         File taskDir = new File(Config.getTaskDir());
         File[] taskFileArray = taskDir.listFiles();
         if (taskFileArray == null || taskFileArray.length == 0) return;
-
+        //每次都要清除上次任务内容
         taskModelList.clear();
-
+        //遍历文件夹内任务文件
         for (File taskFile : taskFileArray) {
-
+            //读取文件，一行一行的解析任务内容，并存入任务列表
             try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(taskFile), StandardCharsets.UTF_8))) {
                 String taskJson;
                 while ((taskJson = br.readLine()) != null) {
@@ -68,8 +68,10 @@ public class SendTask {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                //TODO 完善日志
+                log.error("任务文件读取错误");
+                throw new RuntimeException("任务文件出错，跳过任务");
             }
-
         }
 
         if (taskModelList.size() > 0) {
@@ -98,9 +100,11 @@ public class SendTask {
             synchronized (controllerList) {
                 //遍历tab
                 for (UdpMulticastTabController controller : controllerList) {
+                    //判断ip、端口是否相等，并且已绑定
                     if (controller.getBindIpGroupTxt().getText().equals(task.getIp()) &&
-                            controller.getBindPortTxt().getText().equals(task.getPort().toString()) &&
+                            controller.getBindPortTxt().getText().equals(task.getPort()) &&
                             controller.getBindBeginBtn().isDisable()) {
+                        //发送消息
                         controller.getSendMsgTxt().setText(task.getData());
                         controller.getSendBtn().fire();
                         return;
@@ -124,6 +128,7 @@ public class SendTask {
         //执行任务
         controller.getBindIpGroupTxt().setText(task.getIp());
         controller.getBindPortTxt().setText(task.getPort());
+        controller.getBindBeginBtn().fire();
         controller.getSendMsgTxt().setText(task.getData());
         controller.getSendBtn().fire();
     }
@@ -137,11 +142,11 @@ public class SendTask {
         if (ListUtil.gtZero(controllerList)) {
             synchronized (controllerList) {
                 for (UdpDatagramTabController controller : controllerList) {
-
+                    //判断ip、端口是否相等，并且已绑定
                     if (task.getIp().equals(controller.getIpTxt().getText()) &&
                             controller.getSendPortTxt().getText().equals(task.getPort()) &&
                             controller.getBindBtn().isDisable()) {
-
+                        //发送消息
                         controller.getSendMsgTxt().setText(task.getData());
                         controller.getSendBtn().fire();
                         return;
@@ -165,19 +170,19 @@ public class SendTask {
         //执行任务
         controller.getIpTxt().setText(task.getIp());
         controller.getSendPortTxt().setText(task.getPort());
+        controller.getBindBtn().fire();
         controller.getSendMsgTxt().setText(task.getData());
         controller.getSendBtn().fire();
     }
 
     private void tcpServerTask(TaskModel task) {
-        //任务列表是否为空
         List<TcpServerTabController> controllerList = (List) mainViewController.getTcpServerTabPane().getProperties().get(PropertyKey.CONTROLLER_LIST);
-        //服务器列表是否为空
+        //tabServer服务器列表是否为空
         if (controllerList.size() > 0) {
             synchronized (controllerList) {
                 //遍历服务器
                 controllerList.forEach(controller -> {
-                    //遍历与服务器正在连接的客户端
+                    //遍历与服务器连接中的客户端
                     ObservableList<TcpClientModel> clientList = controller.getClientListView().getItems();
                     if (ListUtil.gtZero(clientList)) {
                         synchronized (clientList) {
@@ -212,10 +217,13 @@ public class SendTask {
         //遍历查看是否存在已连接的任务目标host，存在则直接发送消息，不存在则创建客户端执行任务
         if (controllerList.size() > 0) {
             synchronized (controllerList) {
+                //遍历tab的controllerList
                 for (TcpClientTabController controller : controllerList) {
+                    //判断IP、端口是否相同，并且已经连接
                     if (controller.getIpTxt().getText().equals(task.getIp()) &&
                             controller.getPortTxt().getText().equals(task.getPort()) &&
                             controller.getBeginBtn().isDisabled()) {
+                        //发送消息
                         controller.getSendMsgTxt().setText(task.getData());
                         controller.getSendBtn().fire();
                         return;
@@ -242,10 +250,14 @@ public class SendTask {
         controller.getIpTxt().setText(task.getIp());
         controller.getPortTxt().setText(task.getPort());
         controller.getBeginBtn().fire();
-        //向服务器发送消息
+
         boolean isSend = false;
+        //等待连接
         for (int i = 0; i < timeRetry / 500; i++) {
-            if (controller.getSocket() != null && controller.getSocket().isConnected() && controller.getWriter() != null) {
+            if (controller.getSocket() != null &&
+                    controller.getSocket().isConnected() &&
+                    controller.getWriter() != null) {
+                //连接成功就发送消息
                 controller.getSendMsgTxt().setText(task.getData());
                 controller.getSendBtn().fire();
                 isSend = true;

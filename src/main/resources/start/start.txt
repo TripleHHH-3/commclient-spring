@@ -1,0 +1,8 @@
+{commType:"TCP_CLIENT",sendIp:"127.0.0.1",sendPort:"8998"}
+{commType:"TCP_CLIENT",sendIp:"127.0.0.1",sendPort:"8999"}
+{commType:"TCP_SERVER",recIp:"127.0.0.1",recPort:"8998"}
+{commType:"TCP_SERVER",recIp:"127.0.0.1",recPort:"8999"}
+{commType:"UDP_DATAGRAM",sendIp:"127.0.0.1",sendPort:"8080",recPort:"8080"}
+{commType:"UDP_DATAGRAM",sendIp:"127.0.0.1",sendPort:"8081",recPort:"8081"}
+{commType:"UDP_MULTICAST",sendIp:"127.0.0.1",sendPort:"9991",recIp:"224.255.10.0",recPort:"9991"}
+{commType:"UDP_MULTICAST",sendIp:"127.0.0.1",sendPort:"9999",recIp:"224.255.10.0",recPort:"9999"}
