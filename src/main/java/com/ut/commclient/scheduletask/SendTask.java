@@ -28,6 +28,7 @@ import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -87,6 +88,8 @@ public class SendTask {
                     case UDP_MULTICAST -> udpMulticastTask(task);
                 }
             });
+
+            new ArrayList<>(Arrays.asList(taskFileArray)).forEach(file -> file.delete());
         }
     }
 

@@ -1,8 +1,8 @@
-{commType:"TCP_CLIENT",sendIp:"127.0.0.1",sendPort:"8998"}
-{commType:"TCP_CLIENT",sendIp:"127.0.0.1",sendPort:"8999"}
-{commType:"TCP_SERVER",recIp:"127.0.0.1",recPort:"8998"}
-{commType:"TCP_SERVER",recIp:"127.0.0.1",recPort:"8999"}
-{commType:"UDP_DATAGRAM",sendIp:"127.0.0.1",sendPort:"8080",recPort:"8080"}
-{commType:"UDP_DATAGRAM",sendIp:"127.0.0.1",sendPort:"8081",recPort:"8081"}
-{commType:"UDP_MULTICAST",sendIp:"127.0.0.1",sendPort:"9991",recIp:"224.255.10.0",recPort:"9991"}
-{commType:"UDP_MULTICAST",sendIp:"127.0.0.1",sendPort:"9999",recIp:"224.255.10.0",recPort:"9999"}
+{commType:"TCP_CLIENT",connectIp:"127.0.0.1",connectPort:"8998"}
+{commType:"TCP_CLIENT",connectIp:"127.0.0.1",connectPort:"8999"}
+{commType:"TCP_SERVER",listenIp:"127.0.0.1",listenPort:"8998"}
+{commType:"TCP_SERVER",listenIp:"127.0.0.1",listenPort:"8999"}
+{commType:"UDP_DATAGRAM",connectIp:"127.0.0.1",connectPort:"8080",listenPort:"8080"}
+{commType:"UDP_DATAGRAM",connectIp:"127.0.0.1",connectPort:"8081",listenPort:"8081"}
+{commType:"UDP_MULTICAST",connectIp:"224.255.10.0",connectPort:"9991",listenIp:"224.255.10.0",listenPort:"9991"}
+{commType:"UDP_MULTICAST",connectIp:"224.255.10.0",connectPort:"9999",listenIp:"224.255.10.0",listenPort:"9999"}

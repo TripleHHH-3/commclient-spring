@@ -1,5 +1,6 @@
 package com.ut.commclient.model;
 
+import com.ut.commclient.contant.CommType;
 import lombok.Data;
 
 import java.util.List;
@@ -11,22 +12,9 @@ import java.util.List;
  **/
 @Data
 public class StartModel {
-    private List<TcpHost> tcpClient;
-    private List<TcpHost> tcpServer;
-    private List<UdpHost> udpDatagram;
-    private List<UdpHost> udpMulticast;
-
-    @Data
-    public static class TcpHost {
-        private String ip;
-        private Integer port;
-    }
-
-    @Data
-    public static class UdpHost {
-        private String sendIp;
-        private Integer sendPort;
-        private String recIp;
-        private Integer recPort;
-    }
+    private CommType commType;
+    private String connectIp;
+    private String connectPort;
+    private String listenIp;
+    private String listenPort;
 }
