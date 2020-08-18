@@ -49,21 +49,20 @@ public class Config {
 
     private void createFile(String path) {
         File file = new File(path);
-        //如果是文件夹
-        if (file.isDirectory()) {
+        //判断是否文件夹
+        if (!path.matches(".+\\..+")) {
             //不存在则创建文件夹
             if (!file.exists()) {
                 file.mkdirs();
             }
         } else {
-            //如果是文件
-            File parentFile = file.getParentFile();
-            //先判断文件路径是否存在，先创建路径
-            if (!parentFile.exists()) {
-                parentFile.mkdirs();
-            }
             //文件不存在则创建
             if (!file.exists()) {
+                //先判断父路径是否存在
+                File parentFile = file.getParentFile();
+                if (!parentFile.exists()) {
+                    parentFile.mkdirs();
+                }
                 try {
                     file.createNewFile();
                 } catch (IOException e) {
