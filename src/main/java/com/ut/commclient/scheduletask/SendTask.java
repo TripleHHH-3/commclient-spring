@@ -10,7 +10,6 @@ import com.ut.commclient.controller.center.UdpDatagramTabController;
 import com.ut.commclient.controller.center.UdpMulticastTabController;
 import com.ut.commclient.model.TaskModel;
 import com.ut.commclient.model.TcpClientModel;
-import com.ut.commclient.util.ListUtil;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +22,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.io.*;
 import java.net.URL;
@@ -65,7 +65,10 @@ public class SendTask {
             try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(taskFile), StandardCharsets.UTF_8))) {
                 String taskJson;
                 while ((taskJson = br.readLine()) != null) {
-                    taskModelList.add(JSON.parseObject(taskJson, TaskModel.class));
+                    TaskModel taskModel = JSON.parseObject(taskJson, TaskModel.class);
+                    if (taskModel != null) {
+                        taskModelList.add(taskModel);
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -99,7 +102,7 @@ public class SendTask {
         List<UdpMulticastTabController> controllerList = (List) udpMulticastTabPane.getProperties().get(PropertyKey.CONTROLLER_LIST);
         URL url = (URL) udpMulticastTabPane.getProperties().get(PropertyKey.TAB_URL);
 
-        if (ListUtil.gtZero(controllerList)) {
+        if (!CollectionUtils.isEmpty(controllerList)) {
             synchronized (controllerList) {
                 //遍历tab
                 for (UdpMulticastTabController controller : controllerList) {
@@ -142,7 +145,7 @@ public class SendTask {
         List<UdpDatagramTabController> controllerList = (List) udpDatagramTabPane.getProperties().get(PropertyKey.CONTROLLER_LIST);
         URL url = (URL) udpDatagramTabPane.getProperties().get(PropertyKey.TAB_URL);
         //遍历tab
-        if (ListUtil.gtZero(controllerList)) {
+        if (!CollectionUtils.isEmpty(controllerList)) {
             synchronized (controllerList) {
                 for (UdpDatagramTabController controller : controllerList) {
                     //判断ip、端口是否相等，并且已绑定
@@ -187,7 +190,7 @@ public class SendTask {
                 controllerList.forEach(controller -> {
                     //遍历与服务器连接中的客户端
                     ObservableList<TcpClientModel> clientList = controller.getClientListView().getItems();
-                    if (ListUtil.gtZero(clientList)) {
+                    if (!CollectionUtils.isEmpty(clientList)) {
                         synchronized (clientList) {
                             clientList.forEach(client -> {
                                 //判断IP、端口是否相等，判断套接口是否连接
@@ -282,7 +285,7 @@ public class SendTask {
 
 //    private void udpMulticastTask(TaskModel task) {
 //        List<TaskModel.Target> udpMulticastTask = task.getUdpMulticastTask();
-//        if (ListUtil.gtZero(udpMulticastTask)) {
+//        if (!CollectionUtils.isEmpty(udpMulticastTask)) {
 //
 //            TabPane udpMulticastTabPane = mainViewController.getUdpMulticastTabPane();
 //            List<UdpMulticastTabController> controllerList = (List) udpMulticastTabPane.getProperties().get(PropertyKey.CONTROLLER_LIST);
@@ -291,7 +294,7 @@ public class SendTask {
 //            out:
 //            for (TaskModel.Target target : udpMulticastTask) {
 //
-//                if (ListUtil.gtZero(controllerList)) {
+//                if (!CollectionUtils.isEmpty(controllerList)) {
 //                    synchronized (controllerList) {
 //                        //遍历tab
 //                        for (UdpMulticastTabController controller : controllerList) {
@@ -328,7 +331,7 @@ public class SendTask {
 //
 //    private void udpDatagramTask(TaskModel task) {
 //        List<TaskModel.Target> udpDatagramTask = task.getUdpDatagramTask();
-//        if (ListUtil.gtZero(udpDatagramTask)) {
+//        if (!CollectionUtils.isEmpty(udpDatagramTask)) {
 //
 //            TabPane udpDatagramTabPane = mainViewController.getUdpDatagramTabPane();
 //            List<UdpDatagramTabController> controllerList = (List) udpDatagramTabPane.getProperties().get(PropertyKey.CONTROLLER_LIST);
@@ -337,7 +340,7 @@ public class SendTask {
 //            out:
 //            for (TaskModel.Target target : udpDatagramTask) {
 //                //遍历tab
-//                if (ListUtil.gtZero(controllerList)) {
+//                if (!CollectionUtils.isEmpty(controllerList)) {
 //                    synchronized (controllerList) {
 //                        for (UdpDatagramTabController controller : controllerList) {
 //
@@ -377,10 +380,10 @@ public class SendTask {
 //    private void tcpServerTask(TaskModel task) {
 //        List<TaskModel.Target> tcpServerTask = task.getTcpServerTask();
 //        //任务列表是否为空
-//        if (ListUtil.gtZero(tcpServerTask)) {
+//        if (!CollectionUtils.isEmpty(tcpServerTask)) {
 //            List<TcpServerTabController> controllerList = (List) mainViewController.getTcpServerTabPane().getProperties().get(PropertyKey.CONTROLLER_LIST);
 //            //服务器列表是否为空
-//            if (ListUtil.gtZero(controllerList)) {
+//            if (!CollectionUtils.isEmpty(controllerList)) {
 //                synchronized (controllerList) {
 //                    //遍历任务
 //                    tcpServerTask.forEach(taskModel -> {
@@ -411,7 +414,7 @@ public class SendTask {
 //
 //    private void tcpClientTask(TaskModel task) {
 //        List<TaskModel.Target> tcpClientTask = task.getTcpClientTask();
-//        if (ListUtil.gtZero(tcpClientTask)) {
+//        if (!CollectionUtils.isEmpty(tcpClientTask)) {
 //
 //            TabPane tcpClientTabPane = mainViewController.getTcpClientTabPane();
 //            List<TcpClientTabController> controllerList = (List) tcpClientTabPane.getProperties().get(PropertyKey.CONTROLLER_LIST);

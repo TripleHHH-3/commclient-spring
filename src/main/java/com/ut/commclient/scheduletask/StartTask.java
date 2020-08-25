@@ -9,8 +9,6 @@ import com.ut.commclient.controller.center.TcpServerTabController;
 import com.ut.commclient.controller.center.UdpDatagramTabController;
 import com.ut.commclient.controller.center.UdpMulticastTabController;
 import com.ut.commclient.model.StartModel;
-import com.ut.commclient.model.TaskModel;
-import com.ut.commclient.util.ListUtil;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -50,7 +48,10 @@ public class StartTask implements ApplicationRunner {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(startFile), StandardCharsets.UTF_8))) {
             String startJson;
             while ((startJson = br.readLine()) != null) {
-                startList.add(JSON.parseObject(startJson, StartModel.class));
+                StartModel startModel = JSON.parseObject(startJson, StartModel.class);
+                if (startModel != null) {
+                    startList.add(startModel);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

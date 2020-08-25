@@ -5,7 +5,6 @@ import com.ut.commclient.contant.PropertyKey;
 import com.ut.commclient.controller.MainViewController;
 import com.ut.commclient.controller.center.TcpServerTabController;
 import com.ut.commclient.model.TcpClientModel;
-import com.ut.commclient.util.ListUtil;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -37,7 +37,7 @@ public class TcpServerHeartBeatTask {
     public void task() {
         List<TcpServerTabController> tabControllerList = (List<TcpServerTabController>) mainViewController.getTcpServerTabPane().getProperties().get(PropertyKey.CONTROLLER_LIST);
 
-        if (ListUtil.gtZero(tabControllerList)) {
+        if (!CollectionUtils.isEmpty(tabControllerList)) {
             synchronized (tabControllerList) {
 
                 //第一层遍历每个tab
@@ -47,7 +47,7 @@ public class TcpServerHeartBeatTask {
 
                         ObservableList<TcpClientModel> clientList = controller.getClientListView().getItems();
                         //第二层遍历listView
-                        if (ListUtil.gtZero(clientList)) {
+                        if (!CollectionUtils.isEmpty(clientList)) {
                             List<TcpClientModel> downClients = new ArrayList<>();
                             clientList.forEach(client -> {
                                 //心跳超时加入移除列表

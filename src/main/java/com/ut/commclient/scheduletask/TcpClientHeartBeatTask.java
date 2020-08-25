@@ -4,13 +4,13 @@ import com.ut.commclient.config.HeartBeat;
 import com.ut.commclient.contant.PropertyKey;
 import com.ut.commclient.controller.MainViewController;
 import com.ut.commclient.controller.center.TcpClientTabController;
-import com.ut.commclient.util.ListUtil;
 import com.ut.commclient.util.ResUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -32,7 +32,7 @@ public class TcpClientHeartBeatTask {
     public void task() {
         List<TcpClientTabController> tabControllerList = (List<TcpClientTabController>) mainViewController.getTcpClientTabPane().getProperties().get(PropertyKey.CONTROLLER_LIST);
         //当列表大于0时
-        if (ListUtil.gtZero(tabControllerList)) {
+        if (!CollectionUtils.isEmpty(tabControllerList)) {
 
             synchronized (tabControllerList) {
                 tabControllerList.forEach(controller -> {
